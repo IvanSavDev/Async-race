@@ -3,7 +3,11 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb-base'],
+  extends: [
+    'airbnb-base',
+    'plugin:@typescript-eslint/recommended',
+    'airbnb-typescript/base',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
@@ -11,5 +15,15 @@ module.exports = {
   },
   ignorePatterns: ['dist', 'node_modules', 'webpack.config.js'],
   plugins: ['@typescript-eslint'],
-  rules: {},
+  rules: {
+    'import/prefer-default-export': 'off',
+    '@typescript-eslint/no-explicit-any': 'error',
+  },
+  // settings: {
+  //   'import/resolver': {
+  //     node: {
+  //       extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  //     },
+  //   },
+  // },
 };

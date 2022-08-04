@@ -18,7 +18,7 @@ module.exports = {
 
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[contenthash].js',
+    filename: '[name].js',
     assetModuleFilename: 'assets/[hash][ext][query]',
     clean: true,
   },
@@ -72,12 +72,19 @@ module.exports = {
     ],
   },
 
+  resolve: {
+    extensions: ['.js', '.ts', '.tsx', '.jsx'],
+    alias: {
+      Src: path.resolve(__dirname, 'src/'),
+    },
+  },
+
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './public/index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
+      filename: '[name].css',
     }),
     new ESLintPlugin(),
   ],

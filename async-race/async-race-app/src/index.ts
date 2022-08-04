@@ -1,6 +1,4 @@
-async function lol(): Promise<number> {
-  const result = await Promise.resolve(15);
-  return result;
-}
+import './index.scss';
+import runApp from './init';
 
-lol();
+runApp();

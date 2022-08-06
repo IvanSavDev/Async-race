@@ -45,7 +45,7 @@ body {
   border-bottom: 2px dashed white;
 }
 
-.car__contrainer-control {
+.car__container-control {
   display: flex;
   gap: 20px;
   margin-top: 15px;
@@ -60,4 +60,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 30px;
+}
+
+.car-img {
+  position: relative;
 }

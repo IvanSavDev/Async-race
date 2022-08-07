@@ -1,11 +1,9 @@
-import {
-  calculateAllPagesGarage,
-  resetCreateOptions,
-  setAttributes,
-} from 'Src/utils/utils';
+import { setAttributes } from 'Src/utils/utils';
+import { calculateAllPagesGarage } from 'Src/utils/calculatePages';
 import { createCar, getCars } from 'Src/api';
 import { IState } from 'Src/types/dataInterfaces';
 import renderGarage from '../garagePage';
+import { resetCreateOptions } from 'Src/utils/resetParams';
 
 const listenerCreateCar = (element: HTMLFormElement, state: IState) => {
   element.addEventListener('submit', async (event) => {

@@ -1,11 +1,9 @@
-import { getCar, getCars, getWinners } from './api';
-import { ICar, IState } from './types/dataInterfaces';
+import { getCars } from './api';
+import { IState } from './types/dataInterfaces';
 import renderGarage from './ui/garage/garagePage';
 import generateSwithPanel from './ui/swithPanel';
-import {
-  calculateAllPagesGarage,
-  calculateAllPagesWinners,
-} from './utils/utils';
+import { updateWinners } from './utils/utils';
+import { calculateAllPagesGarage } from './utils/calculatePages';
 
 const runApp = async () => {
   const root = document.getElementById('root')!;
@@ -27,6 +25,8 @@ const runApp = async () => {
       color: '#FFFFFF',
       name: '',
     },
+    sortType: 'ASC',
+    sortCategory: 'wins',
     uiState: {
       selectCar: null,
       garageAllPage: 1,
@@ -50,24 +50,7 @@ const runApp = async () => {
       state.dataCars = dataCars;
       state.uiState.garageAllPage = calculateAllPagesGarage(state);
     }
-    const dataWinners = await getWinners();
-    const requestCarsWinners = dataWinners.winners.map((car) =>
-      Promise.resolve(getCar(car.id))
-    );
-    const result = await Promise.allSettled(requestCarsWinners);
-    const carsWinners = result
-      .filter(({ status }) => status === 'fulfilled')
-      .map((car) => (car as PromiseFulfilledResult<ICar>).value);
-    const carsWinnersUpdate = carsWinners.map((car) => {
-      const winnersData = dataWinners.winners.find(({ id }) => id === car.id)!;
-      return {
-        ...winnersData,
-        ...car,
-      };
-    });
-    state.dataWinners.winners = carsWinnersUpdate;
-    state.dataWinners.count = dataWinners.count;
-    state.uiState.winnersAllPage = calculateAllPagesWinners(state);
+    updateWinners(state);
   } catch (e) {
     console.log(e);
   }

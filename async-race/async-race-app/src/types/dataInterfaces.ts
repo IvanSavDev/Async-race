@@ -52,10 +52,15 @@ export interface IUiState {
   raceStatus: string;
 }
 
+export type SortType = 'ASC' | 'DESC';
+export type SortCategoryType = 'wins' | 'time';
+
 export interface IState {
   dataCars: ICars;
   createCar: ICreateCar;
   updateCar: IUpdateCar;
-  uiState: IUiState;
   dataWinners: ICarsWinners;
+  sortType: SortType;
+  sortCategory: SortCategoryType;
+  uiState: IUiState;
 }

@@ -1,6 +1,6 @@
 import { IState } from 'Src/types/dataInterfaces';
 import { getCars, getWinners } from 'Src/api';
-import { createElement, getDataWinners } from 'Src/utils/utils';
+import { createElement, getDataWinners, updateWinners } from 'Src/utils/utils';
 import renderGarage from './garage/garagePage';
 import renderWinners from './winners/winnersPage';
 
@@ -23,10 +23,9 @@ const listenerSwitchPage = (
       renderGarage(state);
     } else {
       state.uiState.winnersPage = currentPage;
-      const winnersData = await getDataWinners(currentPage);
-      state.dataWinners = winnersData;
+      await updateWinners(state);
+      renderWinners(state);
     }
-    renderWinners(state);
   });
 };
 

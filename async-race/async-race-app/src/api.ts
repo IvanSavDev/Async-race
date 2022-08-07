@@ -57,7 +57,7 @@ export const updateCar = async (id: number, name: string, color: string) => {
   return dataCar;
 };
 
-export const startCar = async (
+export const startCarRequest = async (
   id: number
 ): Promise<{ velocity: number; distance: number }> => {
   const response = await fetch(`${enginePath}?id=${id}&status=started`, {
@@ -92,7 +92,7 @@ export const getWinner = async (id: number) => {
 
 export const getWinners = async (
   page = 1,
-  sort = 'id',
+  sort = 'wins',
   order = 'ASC',
   limit = 10
 ): Promise<ICarsWinners> => {

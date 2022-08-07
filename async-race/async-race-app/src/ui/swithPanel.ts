@@ -1,5 +1,6 @@
 import { IState } from 'Src/types/dataInterfaces';
-import { calculateAllPagesWinners, createElement } from 'Src/utils/utils';
+import { createElement } from 'Src/utils/utils';
+import { calculateAllPagesWinners } from 'Src/utils/calculatePages';
 import renderGarage from './garage/garagePage';
 import renderWinners from './winners/winnersPage';
 import { getDataWinners } from 'Src/utils/utils';

@@ -1,10 +1,11 @@
 import { deleteCar, deleteWinner } from 'Src/api';
 import { IState } from 'Src/types/dataInterfaces';
-import { calculateAllPagesGarage, loadCars } from 'Src/utils/utils';
+import { loadCars, startCar } from 'Src/utils/utils';
+import { calculateAllPagesGarage } from 'Src/utils/calculatePages';
 import generatePagination from 'Src/ui/pagination';
 import generateCar from './car';
 import renderGarage from '../garagePage';
-import { activeAnimation, stopAnimation } from 'Src/utils/animations';
+import { stopAnimation } from 'Src/utils/animations';
 
 const listenListCars = (state: IState, element: HTMLElement) => {
   element.addEventListener('click', async (event) => {
@@ -25,6 +26,7 @@ const listenListCars = (state: IState, element: HTMLElement) => {
       updateCar.color = color;
       updateCar.name = name;
       renderGarage(state);
+      console.dir(containerCar.classList);
     }
     if (target.tagName === 'BUTTON' && target.textContent === 'REMOVE') {
       const isWinner = state.dataWinners.winners.find(({ id }) => id === idCar);
@@ -45,7 +47,7 @@ const listenListCars = (state: IState, element: HTMLElement) => {
       renderGarage(state);
     }
     if (target.tagName === 'BUTTON' && target.textContent === 'A') {
-      activeAnimation(state, containerCar, false);
+      startCar(state, idCar, containerCar);
     }
     if (target.tagName === 'BUTTON' && target.textContent === 'B') {
       stopAnimation(state, containerCar, idCar);

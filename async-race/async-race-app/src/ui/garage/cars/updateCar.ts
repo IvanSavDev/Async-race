@@ -1,7 +1,7 @@
 import { IState } from '../../../types/dataInterfaces';
 import { updateCar, getCars } from 'Src/api';
 import renderGarage from '../garagePage';
-import { resetUpdateOptions } from 'Src/utils/utils';
+import { resetUpdateOptions } from 'Src/utils/resetParams';
 
 const listenerUpdateCar = (element: HTMLFormElement, state: IState) => {
   element.addEventListener('submit', async (event) => {

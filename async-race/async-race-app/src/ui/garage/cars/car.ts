@@ -3,6 +3,7 @@ import { createElement } from 'Src/utils/utils';
 
 const generateBtnsEngine = (isDrive: boolean | undefined) => {
   const containerBtns = document.createElement('div');
+  containerBtns.classList.add('car__btns-control');
   const carStart = createElement(
     'button',
     isDrive ? { disabled: 'true' } : {},
@@ -80,6 +81,12 @@ export const renderCarControl = (
   const carControl = car.querySelector('.car__control')!;
   const newCarControl = generateCarControl(color, isDrive);
   carControl.replaceWith(newCarControl);
+};
+
+export const renderBtnsControlCar = (isDrive: boolean, car: HTMLElement) => {
+  const btnsControlCar = car.querySelector('.car__btns-control')!;
+  const newbtnsControlCar = generateBtnsEngine(isDrive);
+  btnsControlCar.replaceWith(newbtnsControlCar);
 };
 
 export default generateCar;

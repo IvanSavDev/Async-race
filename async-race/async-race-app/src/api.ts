@@ -128,7 +128,7 @@ export const deleteWinner = async (id: number) => {
 };
 
 export const updateWinner = async (id: number, wins: number, time: number) => {
-  const response = await fetch(`${garagePath}/${id}`, {
+  const response = await fetch(`${winnersPath}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

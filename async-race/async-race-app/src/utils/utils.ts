@@ -1,6 +1,5 @@
-import { getCars } from 'Src/api';
-import renderGarage from 'Src/ui/garage/garagePage';
-import { IState } from '../types/dataInterfaces';
+import { getCar, getCars, getWinners } from 'Src/api';
+import { ICar, IState } from '../types/dataInterfaces';
 
 export const resetCreateOptions = (state: IState) => {
   state.createCar.color = '#ffffff';
@@ -126,43 +125,24 @@ export const createElement = (
   return element;
 };
 
-const draw = (img: HTMLElement, progress: number) => {
-  const widthBtnsContainerCar = 55;
-  const widthCar = 100;
-  const widthGap = 40;
-  const widthMarginRight = 20;
-  const width =
-    document.documentElement.clientWidth -
-    widthBtnsContainerCar -
-    widthCar -
-    widthGap -
-    widthMarginRight;
-  img.style.left = `${width * progress}px`;
-};
-
-export const animate =
-  (draw: (img: HTMLElement, progress: number) => void) =>
-  (
-    element: HTMLElement,
-    duration: number,
-    animationStop: { id: null | number }
-  ) => {
-    const start = performance.now();
-
-    animationStop.id = requestAnimationFrame(function animate(time) {
-      // timeFraction изменяется от 0 до 1
-      // console.log(time, start);
-      let timeFraction = (time - start) / duration;
-      if (timeFraction > 1) timeFraction = 1;
-
-      draw(element, timeFraction); // отрисовать её
-
-      if (timeFraction < 1) {
-        animationStop.id = requestAnimationFrame(animate);
-      }
-    });
+export const getDataWinners = async (currentPage: number) => {
+  const dataWinners = await getWinners(currentPage);
+  const requestCarsWinners = dataWinners.winners.map((car) =>
+    Promise.resolve(getCar(car.id))
+  );
+  const result = await Promise.allSettled(requestCarsWinners);
+  const carsWinners = result
+    .filter(({ status }) => status === 'fulfilled')
+    .map((car) => (car as PromiseFulfilledResult<ICar>).value);
+  const carsWinnersUpdate = carsWinners.map((car) => {
+    const winnersData = dataWinners.winners.find(({ id }) => id === car.id)!;
+    return {
+      ...winnersData,
+      ...car,
+    };
+  });
+  return {
+    winners: carsWinnersUpdate,
+    count: dataWinners.count,
   };
-
-const animation = animate(draw);
-
-export { animation };
+};

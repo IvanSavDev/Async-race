@@ -1,7 +1,8 @@
 import { IState } from 'Src/types/dataInterfaces';
-import { createElement } from 'Src/utils/utils';
+import { calculateAllPagesWinners, createElement } from 'Src/utils/utils';
 import renderGarage from './garage/garagePage';
 import renderWinners from './winners/winnersPage';
+import { getDataWinners } from 'Src/utils/utils';
 
 const generateSwithPanel = (state: IState) => {
   const switchPage = createElement('div', { class: 'switch-page' });
@@ -16,11 +17,16 @@ const generateSwithPanel = (state: IState) => {
     'TO WINNERS'
   );
   switchGarage.addEventListener('click', () => {
+    state.uiState.raceStatus = 'start';
     state.uiState.currentPageName = 'garage';
     renderGarage(state);
   });
-  switchWinners.addEventListener('click', () => {
+  switchWinners.addEventListener('click', async () => {
     state.uiState.currentPageName = 'winners';
+    const result = await getDataWinners(state.uiState.winnersPage);
+    state.dataWinners = result;
+    state.uiState.winnersAllPage = calculateAllPagesWinners(state);
+    console.log(state);
     renderWinners(state);
   });
 

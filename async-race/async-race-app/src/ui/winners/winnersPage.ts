@@ -1,5 +1,11 @@
-import { getCarImg } from '../../utils/getImgs';
-import { ICar, ICarWinner, IState } from '../../types/dataInterfaces';
+import { getCarImg } from 'Src/utils/getImgs';
+import {
+  ICar,
+  ICarWinner,
+  ICarWinnerUpdate,
+  IState,
+} from 'Src/types/dataInterfaces';
+import generatePagination from '../pagination';
 
 enum TableHeaders {
   Number = 'Number',
@@ -22,19 +28,16 @@ const generateHeaderTable = () => {
   return headerTable;
 };
 
-const generateBodyTable = (winners: Array<ICarWinner>, cars: Array<ICar>) => {
+const generateBodyTable = (winners: Array<ICarWinnerUpdate>) => {
   const bodyTable = document.createElement('tbody');
-  const rowsBody = winners.map(({ wins, time, id }) => {
+  const rowsBody = winners.map(({ wins, time, id, color, name }) => {
     const row = document.createElement('tr');
     const numberCar = document.createElement('td');
     numberCar.textContent = String(id);
     const carImg = document.createElement('td');
     const carName = document.createElement('td');
-    const currentCar = cars.find((carData) => carData.id === id);
-    if (currentCar) {
-      carImg.innerHTML = getCarImg(currentCar.color);
-      carName.textContent = currentCar.name;
-    }
+    carImg.innerHTML = getCarImg(color);
+    carName.textContent = name;
     const countWinner = document.createElement('td');
     countWinner.textContent = String(wins);
     const bestTime = document.createElement('td');
@@ -59,10 +62,11 @@ const generateWinners = (state: IState) => {
   const countPage = document.createElement('h3');
   countPage.textContent = `Page #${winnersPage}`;
   const headerTable = generateHeaderTable();
-  const bodyTable = generateBodyTable(winners, cars);
+  const bodyTable = generateBodyTable(winners);
+  const pagination = generatePagination(state);
 
   table.append(headerTable, bodyTable);
-  container.append(countCar, countPage, table);
+  container.append(countCar, countPage, table, pagination);
   return container;
 };
 

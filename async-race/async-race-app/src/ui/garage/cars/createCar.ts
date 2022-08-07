@@ -1,4 +1,8 @@
-import { resetCreateOptions, setAttributes } from 'Src/utils/utils';
+import {
+  calculateAllPagesGarage,
+  resetCreateOptions,
+  setAttributes,
+} from 'Src/utils/utils';
 import { createCar, getCars } from 'Src/api';
 import { IState } from 'Src/types/dataInterfaces';
 import renderGarage from '../garagePage';
@@ -15,6 +19,7 @@ const listenerCreateCar = (element: HTMLFormElement, state: IState) => {
     if (newCar) {
       resetCreateOptions(state);
       state.dataCars = newCar;
+      state.uiState.garageAllPage = calculateAllPagesGarage(state);
       renderGarage(state);
     }
   });

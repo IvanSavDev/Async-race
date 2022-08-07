@@ -1,12 +1,12 @@
 import { IState } from 'Src/types/dataInterfaces';
 import { getCars, getWinners } from 'Src/api';
-import { createElement } from 'Src/utils/utils';
-import renderGarage from './garagePage';
+import { createElement, getDataWinners } from 'Src/utils/utils';
+import renderGarage from './garage/garagePage';
+import renderWinners from './winners/winnersPage';
 
-const listenerSwitchPageGarage = (
+const listenerSwitchPage = (
   element: HTMLElement,
   state: IState,
-  render: (state: IState) => void,
   isPrev: boolean
 ) => {
   element.addEventListener('click', async () => {
@@ -20,12 +20,13 @@ const listenerSwitchPageGarage = (
       state.uiState.garagePage = currentPage;
       const carsData = await getCars(currentPage);
       state.dataCars = carsData;
+      renderGarage(state);
     } else {
       state.uiState.winnersPage = currentPage;
-      const winnersData = await getWinners(currentPage);
+      const winnersData = await getDataWinners(currentPage);
       state.dataWinners = winnersData;
     }
-    render(state);
+    renderWinners(state);
   });
 };
 
@@ -46,14 +47,13 @@ const generatePagination = (state: IState): HTMLElement => {
     currentPage === 1 ? { disabled: 'true' } : {},
     'PREV'
   );
-  listenerSwitchPageGarage(prevPage, state, renderGarage, true);
-  console.log(currentPage, lastPage);
+  listenerSwitchPage(prevPage, state, true);
   const nextPage = createElement(
     'button',
     currentPage >= lastPage ? { disabled: 'true' } : {},
     'NEXT'
   );
-  listenerSwitchPageGarage(nextPage, state, renderGarage, false);
+  listenerSwitchPage(nextPage, state, false);
   pagination.append(prevPage, nextPage);
 
   return pagination;

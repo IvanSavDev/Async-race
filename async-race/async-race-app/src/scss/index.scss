@@ -23,7 +23,7 @@ body {
   margin-top: 50px;
 }
 
-.garage {
+.garage-page {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -43,17 +43,21 @@ body {
 
 .car {
   border-bottom: 2px dashed white;
-}
 
-.car__container-control {
-  display: flex;
-  gap: 20px;
-  margin-top: 15px;
-}
+  &__control {
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+  }
 
-.flag-img {
-  margin-left: auto;
-  margin-right: 150px;
+  &__flag-img {
+    margin-left: auto;
+    margin-right: 150px;
+  }
+
+  &__img {
+    position: relative;
+  }
 }
 
 .list-cars {
@@ -62,6 +66,8 @@ body {
   gap: 30px;
 }
 
-.car-img {
-  position: relative;
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }

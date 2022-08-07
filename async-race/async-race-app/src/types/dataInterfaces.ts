@@ -15,8 +15,13 @@ export interface ICarWinner {
   time: number;
 }
 
+export interface ICarWinnerUpdate extends ICarWinner {
+  name: string;
+  color: string;
+}
+
 export interface ICarsWinners {
-  winners: Array<ICarWinner>;
+  winners: Array<ICarWinnerUpdate>;
   count: number;
 }
 
@@ -36,12 +41,15 @@ export interface IUiState {
   garageAllPage: number;
   winnersPage: number;
   winnersAllPage: number;
-  animationsIds: {
+  lastWinner: number | null;
+  animationsCars: {
     [key: number]: {
       id: number | null;
+      drive: boolean;
     };
   };
   currentPageName: string;
+  raceStatus: string;
 }
 
 export interface IState {

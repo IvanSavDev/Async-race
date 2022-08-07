@@ -13,7 +13,7 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  ignorePatterns: ['dist', 'node_modules', 'webpack.config.js'],
+  ignorePatterns: ['node_modules', 'webpack.config.js'],
   plugins: ['@typescript-eslint'],
   rules: {
     'import/prefer-default-export': 'off',

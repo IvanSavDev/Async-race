@@ -1,68 +1,62 @@
-import { IState } from '../../../types/dataInterfaces';
+import { IState } from 'Src/types/dataInterfaces';
 import { updateCar, getCars } from 'Src/api';
 import renderGarage from '../garagePage';
 import { resetUpdateOptions } from 'Src/utils/resetParams';
+import { createElement, updateCars } from 'Src/utils/utils';
 
-const listenerUpdateCar = (element: HTMLFormElement, state: IState) => {
+const listenerUpdateCar = (element: HTMLElement, state: IState) => {
   element.addEventListener('submit', async (event) => {
-    try {
-      event.preventDefault();
-      const form = event.target as HTMLFormElement;
-      const name = form.text.value;
-      const color = form.color.value;
-      const selectCar = state.uiState.selectCar!;
-      await updateCar(selectCar, name, color);
-      const newCars = await getCars();
-      if (newCars) {
-        state.dataCars = newCars;
-        resetUpdateOptions(state);
-        renderGarage(state);
-      }
-    } catch (e) {
-      console.error(e);
-    }
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const name = form.text.value;
+    const color = form.color.value;
+    const selectCar = state.uiState.selectCar!;
+    await updateCar(selectCar, name, color);
+    await updateCars(state);
+    resetUpdateOptions(state);
+    renderGarage(state);
   });
 };
 
-const setDisabled = (state: IState, element: HTMLElement) => {
-  const isSelectCar = state.uiState.selectCar;
-  if (!isSelectCar) {
-    element.setAttribute('disabled', 'true');
-  } else {
-    element.removeAttribute('disabled');
-  }
-};
-
-const generateFieldUpdateCar = (state: IState): HTMLFormElement => {
+const generateFieldUpdateCar = (state: IState): HTMLElement => {
   const {
+    uiState: { selectCar },
     updateCar: { name, color },
   } = state;
 
-  const updateCar = document.createElement('form');
-  updateCar.classList.add('update-car');
+  const updateCar = createElement('form', { class: 'update-car' });
   listenerUpdateCar(updateCar, state);
-  const updateCarName = document.createElement('input');
-  updateCarName.setAttribute('type', 'text');
-  updateCarName.setAttribute('value', name);
-  updateCarName.setAttribute('name', 'text');
-  setDisabled(state, updateCarName);
-  updateCarName.addEventListener('input', (event) => {
-    const input = event.target as HTMLInputElement;
+
+  const updateCarName = createElement('input', {
+    type: 'text',
+    value: name,
+    name: 'text',
+    disabled: selectCar ? false : true,
+  });
+  updateCarName.addEventListener('input', ({ target }) => {
+    const input = target as HTMLInputElement;
     state.updateCar.name = input.value;
   });
-  const updateCarColor = document.createElement('input');
-  updateCarColor.setAttribute('type', 'color');
-  updateCarColor.setAttribute('value', color);
-  updateCarColor.setAttribute('name', 'color');
-  setDisabled(state, updateCarColor);
-  updateCarColor.addEventListener('input', (event) => {
-    const input = event.target as HTMLInputElement;
+
+  const updateCarColor = createElement('input', {
+    type: 'color',
+    value: color,
+    name: 'color',
+    disabled: selectCar ? false : true,
+  });
+  updateCarColor.addEventListener('input', ({ target }) => {
+    const input = target as HTMLInputElement;
     state.updateCar.color = input.value;
   });
-  const updateCarBtn = document.createElement('button');
-  updateCarBtn.setAttribute('type', 'submit');
-  updateCarBtn.textContent = 'UPDATE';
-  setDisabled(state, updateCarBtn);
+
+  const updateCarBtn = createElement(
+    'button',
+    {
+      type: 'submit',
+      disabled: selectCar ? false : true,
+    },
+    'UPDATE'
+  );
   updateCar.append(updateCarName, updateCarColor, updateCarBtn);
 
   return updateCar;

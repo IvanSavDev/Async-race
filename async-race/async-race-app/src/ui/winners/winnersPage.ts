@@ -6,13 +6,14 @@ import {
 } from 'Src/types/dataInterfaces';
 import generatePagination from '../pagination';
 import { updateWinners } from 'Src/utils/utils';
+import { SortCategory, SortTypes } from 'Src/enum/enum';
 
 const sortCategory: {
   'Best time (seconds)': SortCategoryType;
   Wins: SortCategoryType;
 } = {
-  'Best time (seconds)': 'time',
-  Wins: 'wins',
+  'Best time (seconds)': SortCategory.time,
+  Wins: SortCategory.wins,
 };
 
 enum TableHeaders {
@@ -23,6 +24,22 @@ enum TableHeaders {
   Time = 'Best time (seconds)',
 }
 
+const activeSort = (
+  state: IState,
+  column: HTMLElement,
+  header: TableHeaders.Wins | TableHeaders.Time
+) => {
+  column.addEventListener('click', async () => {
+    const currentSortType = state.sortType;
+    const updateSortType =
+      currentSortType === SortTypes.ASC ? SortTypes.DESC : SortTypes.ASC;
+    state.sortCategory = sortCategory[header];
+    state.sortType = updateSortType;
+    await updateWinners(state);
+    renderWinners(state);
+  });
+};
+
 const generateHeaderTable = (state: IState) => {
   const { sortType } = state;
   const headerTable = document.createElement('thead');
@@ -31,15 +48,9 @@ const generateHeaderTable = (state: IState) => {
     const column = document.createElement('th');
     column.textContent = header;
     if (header === TableHeaders.Wins || header === TableHeaders.Time) {
-      column.addEventListener('click', async () => {
-        const currentSortType = state.sortType;
-        const updateSortType = currentSortType === 'ASC' ? 'DESC' : 'ASC';
-        state.sortCategory = sortCategory[header];
-        state.sortType = updateSortType;
-        await updateWinners(state);
-        renderWinners(state);
-      });
-      const updatedHeader = sortType === 'ASC' ? `${header} ↓` : `${header} ↑`;
+      activeSort(state, column, header);
+      const updatedHeader =
+        sortType === SortTypes.ASC ? `${header} ↓` : `${header} ↑`;
       column.textContent =
         sortCategory[header] === state.sortCategory ? updatedHeader : header;
     }
@@ -56,8 +67,11 @@ const generateBodyTable = (
 ) => {
   const bodyTable = document.createElement('tbody');
   const rowsBody = winners.map(({ wins, time, color, name }, index) => {
-    const limitWinnerOnPage = 10;
-    const numberCarOnPage = (numberPage - 1) * limitWinnerOnPage + (index + 1);
+    const limitWinnersOnPage = 10;
+    const prevPageNumber = numberPage - 1;
+    const diffWithPrevPage = prevPageNumber * limitWinnersOnPage;
+    const currentNumberRow = index + 1;
+    const numberCarOnPage = diffWithPrevPage + currentNumberRow;
     const row = document.createElement('tr');
     const numberCar = document.createElement('td');
     numberCar.textContent = String(numberCarOnPage);
@@ -79,13 +93,13 @@ const generateBodyTable = (
 
 const generateWinners = (state: IState) => {
   const {
+    winnersPage,
     dataWinners: { count, winners },
-    uiState: { winnersPage },
   } = state;
   const container = document.createElement('div');
   const table = document.createElement('table');
   const countCar = document.createElement('h2');
-  countCar.textContent = `Garage (${count})`;
+  countCar.textContent = `Winners (${count})`;
   const countPage = document.createElement('h3');
   countPage.textContent = `Page #${winnersPage}`;
   const headerTable = generateHeaderTable(state);

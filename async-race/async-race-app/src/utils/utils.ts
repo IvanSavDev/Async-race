@@ -1,21 +1,40 @@
 import {
-  driveCar,
+  createWinner,
   getCar,
   getCars,
+  getWinner,
   getWinners,
   startCarRequest,
+  stopCar,
+  updateWinner,
 } from 'Src/api';
-import { ICar, IState } from '../types/dataInterfaces';
-import { activeAnimation, handleResultDriveCar } from './animations';
-import { COUNT_MSEC_IN_SEC, getSecFromMsec } from './timeValues';
-import { calculateAllPagesWinners } from './calculatePages';
+import { ICarWinnerUpdate, IState } from '../types/dataInterfaces';
+import { COUNT_MSEC_IN_SEC } from './time';
+import {
+  calculateAllPagesGarage,
+  calculateAllPagesWinners,
+} from './calculatePages';
+import { renderControlRace } from 'Src/ui/garage/controlRace';
 
-export const getTimeDriveCar = async (idCar: number) => {
-  const { velocity, distance } = await startCarRequest(idCar);
-  const timeDrive = distance / velocity;
-  const timeDriveInSeconds = Number((timeDrive / COUNT_MSEC_IN_SEC).toFixed(2));
-  console.log(timeDriveInSeconds);
-  return timeDriveInSeconds;
+export const createElement = (
+  elementName: string,
+  attrs: { [key: string]: string | boolean } = {},
+  text: string = ''
+) => {
+  const element = document.createElement(elementName);
+  Object.keys(attrs).forEach((key) => {
+    if (typeof attrs[key] === 'boolean') {
+      if (attrs[key] === false) {
+        return;
+      } else {
+        element.setAttribute(key, key);
+      }
+    } else {
+      element.setAttribute(key, String(attrs[key]));
+    }
+  });
+  element.innerHTML = text;
+  return element;
 };
 
 const getRandomNumber = (min: number, max: number) =>
@@ -23,6 +42,13 @@ const getRandomNumber = (min: number, max: number) =>
 
 const randomColor = () =>
   `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+export const getTimeDriveCar = async (idCar: number) => {
+  const { velocity, distance } = await startCarRequest(idCar);
+  const timeDrive = distance / velocity;
+  const timeDriveInSeconds = Number((timeDrive / COUNT_MSEC_IN_SEC).toFixed(2));
+  return timeDriveInSeconds;
+};
 
 export const generateOneHundredCars = () => {
   const nameCars = [
@@ -59,89 +85,62 @@ export const generateOneHundredCars = () => {
   });
 };
 
-export const setAttributes = (
-  element: HTMLElement,
-  attrs: { [key: string]: string }
-) => Object.keys(attrs).forEach((key) => element.setAttribute(key, attrs[key]));
-
-export const createElement = (
-  elementName: string,
-  attrs: { [key: string]: string } = {},
-  text: string = ''
-) => {
-  const element = document.createElement(elementName);
-  Object.keys(attrs).forEach((key) => element.setAttribute(key, attrs[key]));
-  element.innerHTML = text;
-  return element;
-};
-
-export const getDataWinners = async (currentPage: number) => {
-  const dataWinners = await getWinners(currentPage);
-  const requestCarsWinners = dataWinners.winners.map((car) =>
-    Promise.resolve(getCar(car.id))
-  );
-  const result = await Promise.allSettled(requestCarsWinners);
-  const carsWinners = result
-    .filter(({ status }) => status === 'fulfilled')
-    .map((car) => (car as PromiseFulfilledResult<ICar>).value);
-  const carsWinnersUpdate = carsWinners.map((car) => {
-    const winnersData = dataWinners.winners.find(({ id }) => id === car.id)!;
-    return {
-      ...winnersData,
-      ...car,
-    };
-  });
-  return {
-    winners: carsWinnersUpdate,
-    count: dataWinners.count,
-  };
-};
-
-export const loadCars = async (state: IState) => {
-  if (state.dataCars.cars.length === 0 && state.uiState.garagePage !== 1) {
-    state.uiState.garagePage -= 1;
-  }
-  const currentPage = state.uiState.garagePage;
-  const dataCars = await getCars(currentPage);
-  if (dataCars) {
-    state.dataCars = dataCars;
-  }
-};
-
-export const startCar = async (
-  state: IState,
-  idCar: number,
-  car: HTMLElement
-) => {
-  const timeInSeconds = await getTimeDriveCar(idCar);
-  const timeInMsec = getSecFromMsec(timeInSeconds);
-  activeAnimation(state, car, timeInMsec);
-  const result = await driveCar(idCar);
-  handleResultDriveCar(state, result, idCar, timeInSeconds);
+export const updateCars = async (state: IState) => {
+  const result = await getCars(state.garagePage);
+  state.dataCars = result;
+  state.uiState.garageAllPage = calculateAllPagesGarage(state);
 };
 
 export const updateWinners = async (state: IState) => {
-  const {
-    uiState: { winnersPage },
-    sortCategory,
-    sortType,
-  } = state;
+  const { winnersPage, sortCategory, sortType } = state;
   const dataWinners = await getWinners(winnersPage, sortCategory, sortType);
-  const requestCarsWinners = dataWinners.winners.map((car) =>
-    Promise.resolve(getCar(car.id))
-  );
-  const result = await Promise.allSettled(requestCarsWinners);
-  const carsWinners = result
-    .filter(({ status }) => status === 'fulfilled')
-    .map((car) => (car as PromiseFulfilledResult<ICar>).value);
-  const carsWinnersUpdate = carsWinners.map((car) => {
-    const winnersData = dataWinners.winners.find(({ id }) => id === car.id)!;
+  const requestCarsWinners = dataWinners.winners.map(async (car) => {
+    const matchCar = await getCar(car.id);
     return {
-      ...winnersData,
+      ...matchCar,
       ...car,
     };
   });
-  state.dataWinners.winners = carsWinnersUpdate;
+  const result = await Promise.allSettled(requestCarsWinners);
+  const carsWinners = result
+    .filter(({ status }) => status === 'fulfilled')
+    .map((car) => (car as PromiseFulfilledResult<ICarWinnerUpdate>).value);
+  state.dataWinners.winners = carsWinners;
   state.dataWinners.count = dataWinners.count;
   state.uiState.winnersAllPage = calculateAllPagesWinners(state);
+};
+
+export const handleResultDriveCar = async (
+  state: IState,
+  result: number,
+  idCar: number,
+  time: number
+) => {
+  const {
+    uiState: { animationsCars },
+    uiState,
+    dataCars: { cars },
+  } = state;
+  const animationId = animationsCars[idCar].id;
+  const isDrive = animationsCars[idCar].drive;
+  if (result === 500 && animationId) {
+    cancelAnimationFrame(animationId);
+    uiState.animationsCars[idCar].drive = false;
+    stopCar(idCar);
+  }
+
+  if (result === 200 && uiState.raceStatus === 'process' && isDrive) {
+    uiState.raceStatus = 'finished';
+    const currentCar = cars.find(({ id }) => id === idCar)!;
+    alert(`${currentCar.name} wont first! Time: ${time}`);
+    renderControlRace(state);
+    const winner = await getWinner(idCar);
+    if (winner) {
+      const { wins } = winner;
+      const bestTime = winner.time > time ? time : winner.time;
+      await updateWinner(idCar, wins + 1, bestTime);
+    } else {
+      await createWinner(idCar, 1, time);
+    }
+  }
 };

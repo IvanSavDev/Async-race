@@ -4,6 +4,7 @@ import renderGarage from './ui/garage/garagePage';
 import generateSwithPanel from './ui/swithPanel';
 import { updateWinners } from './utils/utils';
 import { calculateAllPagesGarage } from './utils/calculatePages';
+import { Pages, RaceStatus, SortCategory, SortTypes } from './enum/enum';
 
 const runApp = async () => {
   const root = document.getElementById('root')!;
@@ -25,36 +26,31 @@ const runApp = async () => {
       color: '#FFFFFF',
       name: '',
     },
-    sortType: 'ASC',
-    sortCategory: 'wins',
+    sortType: SortTypes.ASC,
+    sortCategory: SortCategory.wins,
+    garagePage: 1,
+    winnersPage: 1,
     uiState: {
       selectCar: null,
       garageAllPage: 1,
-      garagePage: 1,
-      winnersPage: 1,
       winnersAllPage: 1,
-      lastWinner: null,
       animationsCars: {},
-      currentPageName: 'garage',
-      raceStatus: 'start',
+      currentPageName: Pages.garage,
+      raceStatus: RaceStatus.start,
     },
+    controller: new AbortController(),
   };
 
   const mainContainer = document.createElement('div');
   mainContainer.classList.add('container-app');
   root.append(generateSwithPanel(state), mainContainer);
 
-  try {
-    const dataCars = await getCars();
-    if (dataCars) {
-      state.dataCars = dataCars;
-      state.uiState.garageAllPage = calculateAllPagesGarage(state);
-    }
-    updateWinners(state);
-  } catch (e) {
-    console.log(e);
+  const dataCars = await getCars();
+  if (dataCars) {
+    state.dataCars = dataCars;
+    state.uiState.garageAllPage = calculateAllPagesGarage(state);
   }
-  console.log(state);
+  await updateWinners(state);
   renderGarage(state);
 };
 

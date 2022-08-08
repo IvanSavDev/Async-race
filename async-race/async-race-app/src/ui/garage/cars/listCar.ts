@@ -1,63 +1,63 @@
-import { deleteCar, deleteWinner } from 'Src/api';
+import { deleteCar, deleteWinner, stopCar, startCar } from 'Src/api';
 import { IState } from 'Src/types/dataInterfaces';
-import { loadCars, startCar } from 'Src/utils/utils';
-import { calculateAllPagesGarage } from 'Src/utils/calculatePages';
+import { updateCars } from 'Src/utils/utils';
 import generatePagination from 'Src/ui/pagination';
 import generateCar from './car';
 import renderGarage from '../garagePage';
 import { stopAnimation } from 'Src/utils/animations';
 
 const listenListCars = (state: IState, element: HTMLElement) => {
-  element.addEventListener('click', async (event) => {
-    const {
-      dataCars,
-      uiState,
-      updateCar,
-      uiState: { animationsCars },
-    } = state;
-    const target = event.target as HTMLElement;
-    const containerCar = target.closest('.car') as HTMLElement;
+  element.addEventListener('click', async ({ target }) => {
+    const { dataCars, uiState, updateCar, garagePage } = state;
+    const selectedElement = target as HTMLElement;
+    const containerCar = selectedElement.closest('.car') as HTMLElement;
     if (!containerCar) return;
     const idCar = Number(containerCar.getAttribute('id'));
     const { name, color } = dataCars.cars.find(({ id }) => id === idCar)!;
-
-    if (target.tagName === 'BUTTON' && target.textContent === 'SELECT') {
+    if (
+      selectedElement.tagName === 'BUTTON' &&
+      selectedElement.textContent === 'SELECT'
+    ) {
       uiState.selectCar = idCar;
       updateCar.color = color;
       updateCar.name = name;
       renderGarage(state);
-      console.dir(containerCar.classList);
     }
-    if (target.tagName === 'BUTTON' && target.textContent === 'REMOVE') {
-      const isWinner = state.dataWinners.winners.find(({ id }) => id === idCar);
-      if (isWinner) {
-        await deleteWinner(idCar);
-      }
+    if (
+      selectedElement.tagName === 'BUTTON' &&
+      selectedElement.textContent === 'REMOVE'
+    ) {
       await deleteCar(idCar);
-      if (dataCars.cars.length === 1) {
-        dataCars.cars = [];
-      }
-      uiState.garageAllPage = calculateAllPagesGarage(state);
-      Object.keys(animationsCars).forEach(
-        (key: string) => (animationsCars[Number(key)].drive = false)
-      );
-
+      await deleteWinner(idCar);
       delete state.uiState.animationsCars[idCar];
-      await loadCars(state);
+      if (dataCars.cars.length === 1 && garagePage !== 1) {
+        state.garagePage -= 1;
+      }
+      await updateCars(state);
       renderGarage(state);
     }
-    if (target.tagName === 'BUTTON' && target.textContent === 'A') {
-      startCar(state, idCar, containerCar);
+    if (
+      selectedElement.tagName === 'BUTTON' &&
+      selectedElement.textContent === 'A'
+    ) {
+      await startCar(state, idCar, containerCar);
     }
-    if (target.tagName === 'BUTTON' && target.textContent === 'B') {
+    if (
+      selectedElement.tagName === 'BUTTON' &&
+      selectedElement.textContent === 'B'
+    ) {
+      state.controller.abort();
+      state.controller = new AbortController();
+      await stopCar(idCar);
       stopAnimation(state, containerCar, idCar);
     }
   });
 };
 
-const generateListCars = (state: IState): HTMLDivElement => {
+const generateListCars = (state: IState) => {
   const {
-    uiState: { garagePage, animationsCars },
+    garagePage,
+    uiState: { animationsCars },
     dataCars: { count, cars: dataCars },
   } = state;
   const container = document.createElement('div');
@@ -69,7 +69,7 @@ const generateListCars = (state: IState): HTMLDivElement => {
   listCars.classList.add('list-cars');
   listenListCars(state, listCars);
   const cars = dataCars.map(({ name, color, id }) =>
-    generateCar(name, color, id, animationsCars[id]?.drive)
+    generateCar(name, color, id, animationsCars[id])
   );
   listCars.append(...cars);
   const pagination = generatePagination(state);

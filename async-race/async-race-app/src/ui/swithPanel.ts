@@ -1,9 +1,9 @@
 import { IState } from 'Src/types/dataInterfaces';
 import { createElement } from 'Src/utils/utils';
-import { calculateAllPagesWinners } from 'Src/utils/calculatePages';
 import renderGarage from './garage/garagePage';
 import renderWinners from './winners/winnersPage';
-import { getDataWinners } from 'Src/utils/utils';
+import { updateWinners } from 'Src/utils/utils';
+import { Pages } from 'Src/enum/enum';
 
 const generateSwithPanel = (state: IState) => {
   const switchPage = createElement('div', { class: 'switch-page' });
@@ -18,16 +18,12 @@ const generateSwithPanel = (state: IState) => {
     'TO WINNERS'
   );
   switchGarage.addEventListener('click', () => {
-    state.uiState.raceStatus = 'start';
-    state.uiState.currentPageName = 'garage';
+    state.uiState.currentPageName = Pages.garage;
     renderGarage(state);
   });
   switchWinners.addEventListener('click', async () => {
-    state.uiState.currentPageName = 'winners';
-    const result = await getDataWinners(state.uiState.winnersPage);
-    state.dataWinners = result;
-    state.uiState.winnersAllPage = calculateAllPagesWinners(state);
-    console.log(state);
+    state.uiState.currentPageName = Pages.winners;
+    await updateWinners(state);
     renderWinners(state);
   });
 
@@ -37,12 +33,3 @@ const generateSwithPanel = (state: IState) => {
 };
 
 export default generateSwithPanel;
-
-// const switchPage = document.createElement('div');
-// switchPage.classList.add('switch-page');
-// const switchGarage = document.createElement('button');
-// switchGarage.classList.add('switch-page__garage');
-// switchGarage.textContent = 'TO GARAGE';
-// const switchWinners = document.createElement('button');
-// switchWinners.classList.add('switch-page__winners');
-// switchWinners.textContent = 'TO WINNERS';

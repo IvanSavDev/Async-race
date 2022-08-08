@@ -1,7 +1,5 @@
-import { createWinner, startCarRequest, stopCar, updateWinner } from 'Src/api';
 import { IState } from 'Src/types/dataInterfaces';
 import { renderBtnsControlCar, renderCarControl } from 'Src/ui/garage/cars/car';
-import { renderControlRace } from 'Src/ui/garage/controlRace';
 
 const draw = (img: HTMLElement, progress: number) => {
   const widthBtnsContainerCar = 55;
@@ -15,59 +13,33 @@ const draw = (img: HTMLElement, progress: number) => {
     widthGap -
     widthMarginRight;
   img.style.left = `${width * progress}px`;
+  return width * progress;
 };
 
 const animate =
-  (draw: (img: HTMLElement, progress: number) => void) =>
+  (draw: (img: HTMLElement, progress: number) => number) =>
   (
     element: HTMLElement,
     duration: number,
-    animationStop: { id: null | number }
+    animationCar: { id: null | number; drive: boolean; position: number }
   ) => {
-    const start = performance.now();
-    animationStop.id = requestAnimationFrame(function animate(time) {
-      let timeFraction = (time - start) / duration;
-      if (timeFraction > 1) timeFraction = 1;
+    if (animationCar.drive) {
+      const start = performance.now();
+      animationCar.id = requestAnimationFrame(function animate(time) {
+        let timeFraction = (time - start) / duration;
+        if (timeFraction > 1) timeFraction = 1;
 
-      draw(element, timeFraction);
+        const resultDraw = draw(element, timeFraction);
+        animationCar.position = resultDraw;
 
-      if (timeFraction < 1) {
-        animationStop.id = requestAnimationFrame(animate);
-      }
-    });
+        if (timeFraction < 1) {
+          animationCar.id = requestAnimationFrame(animate);
+        }
+      });
+    }
   };
 
 const animation = animate(draw);
-
-export const handleResultDriveCar = async (
-  state: IState,
-  result: number,
-  idCar: number,
-  time: number
-) => {
-  const { uiState } = state;
-  const animationId = state.uiState.animationsCars[idCar].id;
-  if (result === 500 && animationId) {
-    cancelAnimationFrame(animationId);
-    uiState.animationsCars[idCar].drive = false;
-    stopCar(idCar);
-  }
-
-  if (result === 200 && uiState.raceStatus === 'process') {
-    uiState.raceStatus = 'finished';
-    const currentCar = state.dataCars.cars.find(({ id }) => id === idCar)!;
-    alert(`${currentCar.name} wont first! Time: ${time}`);
-    renderControlRace(state);
-    const winner = state.dataWinners.winners.find(({ id }) => id === idCar);
-    if (winner) {
-      const { wins } = winner;
-      const bestTime = winner.time > time ? time : winner.time;
-      await updateWinner(idCar, wins + 1, bestTime);
-    } else {
-      await createWinner(idCar, 1, time);
-    }
-  }
-};
 
 export const activeAnimation = async (
   state: IState,
@@ -75,10 +47,12 @@ export const activeAnimation = async (
   timeDrive: number
 ) => {
   const { uiState } = state;
-  const animationCar: { id: null | number; drive: boolean } = {
-    id: null,
-    drive: true,
-  };
+  const animationCar: { id: null | number; drive: boolean; position: number } =
+    {
+      id: null,
+      drive: true,
+      position: 0,
+    };
   const idCar = Number(car.getAttribute('id'));
   uiState.animationsCars[idCar] = animationCar;
   renderBtnsControlCar(animationCar.drive, car);
@@ -97,11 +71,11 @@ export const stopAnimation = async (
   } = state;
   animationsCars[idCar].drive = false;
   const idAnimation = animationsCars[idCar].id;
+  animationsCars[idCar].position = 0;
   if (idAnimation) {
     cancelAnimationFrame(idAnimation);
     const { color } = dataCars.cars.find(({ id }) => id === idCar)!;
-    const isDrive = animationsCars[idCar].drive;
-    renderCarControl(car, color, isDrive);
+    renderCarControl(car, color, animationsCars[idCar]);
   }
 };
 

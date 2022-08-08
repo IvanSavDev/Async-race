@@ -35,18 +35,18 @@ export interface IUpdateCar {
   name: string;
 }
 
+export interface IAnimationCar {
+  id: number | null;
+  drive: boolean;
+  position: number;
+}
+
 export interface IUiState {
   selectCar: number | null;
-  garagePage: number;
   garageAllPage: number;
-  winnersPage: number;
   winnersAllPage: number;
-  lastWinner: number | null;
   animationsCars: {
-    [key: number]: {
-      id: number | null;
-      drive: boolean;
-    };
+    [key: number]: IAnimationCar;
   };
   currentPageName: string;
   raceStatus: string;
@@ -62,5 +62,8 @@ export interface IState {
   dataWinners: ICarsWinners;
   sortType: SortType;
   sortCategory: SortCategoryType;
+  garagePage: number;
+  winnersPage: number;
   uiState: IUiState;
+  controller: AbortController;
 }

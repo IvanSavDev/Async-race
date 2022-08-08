@@ -1,18 +1,18 @@
+import { IAnimationCar } from 'Src/types/dataInterfaces';
 import { getCarImg, getFlagImg } from 'Src/utils/getImgs';
 import { createElement } from 'Src/utils/utils';
 
 const generateBtnsEngine = (isDrive: boolean | undefined) => {
-  const containerBtns = document.createElement('div');
-  containerBtns.classList.add('car__btns-control');
+  const containerBtns = createElement('div', { class: 'car__btns-control' });
   const carStart = createElement(
     'button',
-    isDrive ? { disabled: 'true' } : {},
+    { disabled: isDrive ? true : false },
     'A'
   );
 
   const carStop = createElement(
     'button',
-    isDrive ? {} : { disabled: 'true' },
+    { disabled: isDrive ? false : true },
     'B'
   );
 
@@ -38,7 +38,11 @@ const generateCarInfo = (nameCar: string) => {
   return carInfo;
 };
 
-const generateCarControl = (color: string, isDrive: boolean | undefined) => {
+const generateCarControl = (
+  color: string,
+  isDrive: boolean | undefined,
+  posititon: number
+) => {
   const carControlBtn = generateBtnsEngine(isDrive);
 
   const carControl = document.createElement('div');
@@ -50,6 +54,7 @@ const generateCarControl = (color: string, isDrive: boolean | undefined) => {
   const carImgContainer = document.createElement('div');
   carImgContainer.classList.add('car__img');
   carImgContainer.innerHTML = getCarImg(color);
+  carImgContainer.style.left = `${posititon}px`;
   carControl.append(carControlBtn, carImgContainer, flagImgContainer);
 
   return carControl;
@@ -59,14 +64,18 @@ const generateCar = (
   nameCar: string,
   color: string,
   id: number,
-  animationCar: boolean | undefined
+  animationCar: IAnimationCar
 ): HTMLDivElement => {
   const carContainer = document.createElement('div');
   carContainer.classList.add('car');
   carContainer.setAttribute('id', String(id));
 
   const carInfo = generateCarInfo(nameCar);
-  const carControl = generateCarControl(color, animationCar);
+  const carControl = generateCarControl(
+    color,
+    animationCar?.drive,
+    animationCar?.position
+  );
 
   carContainer.append(carInfo, carControl);
 
@@ -76,32 +85,25 @@ const generateCar = (
 export const renderCarControl = (
   car: HTMLElement,
   color: string,
-  isDrive: boolean | undefined
+  animationCar: IAnimationCar
 ) => {
-  const carControl = car.querySelector('.car__control')!;
-  const newCarControl = generateCarControl(color, isDrive);
-  carControl.replaceWith(newCarControl);
+  const carControl = car.querySelector('.car__control');
+  if (carControl) {
+    const newCarControl = generateCarControl(
+      color,
+      animationCar.drive,
+      animationCar.position
+    );
+    carControl.replaceWith(newCarControl);
+  }
 };
 
 export const renderBtnsControlCar = (isDrive: boolean, car: HTMLElement) => {
-  const btnsControlCar = car.querySelector('.car__btns-control')!;
-  const newbtnsControlCar = generateBtnsEngine(isDrive);
-  btnsControlCar.replaceWith(newbtnsControlCar);
+  const btnsControlCar = car.querySelector('.car__btns-control');
+  if (btnsControlCar) {
+    const newBtnsControlCar = generateBtnsEngine(isDrive);
+    btnsControlCar.replaceWith(newBtnsControlCar);
+  }
 };
 
 export default generateCar;
-
-// carStart.textContent = 'A';
-// if (isDrive) {
-//   carStart.setAttribute('disabled', '');
-// } else {
-//   carStart.removeAttribute('disabled');
-// }
-
-// const carStop = document.createElement('button');
-// carStop.textContent = 'B';
-// if (!isDrive) {
-//   carStop.setAttribute('disabled', '');
-// } else {
-//   carStop.removeAttribute('disabled');
-// }

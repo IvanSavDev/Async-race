@@ -15,24 +15,14 @@ const generateControlPanel = (state: IState): HTMLElement => {
   return container;
 };
 
-const renderGarage = (state: IState): void => {
+const renderGarage = (state: IState) => {
   const garage = document.createElement('div');
-  const app = document.querySelector('.container-app')!;
+  const app = document.querySelector('.container-app');
   garage.classList.add('garage-page');
   garage.append(generateControlPanel(state), generateListCars(state));
-  console.log(state);
-  app.replaceChildren(garage);
+  if (app) {
+    app.replaceChildren(garage);
+  }
 };
 
 export default renderGarage;
-
-// const generateGarage = (state: IState): HTMLDivElement => {
-//   const garage = document.createElement('div');
-//   garage.classList.add('garage');
-//   garage.append(
-//     generateControlPanel(state),
-//     generateListCars(state),
-//     generatePagination(state, renderGarage)
-//   );
-//   return garage;
-// };

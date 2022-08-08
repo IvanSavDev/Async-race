@@ -1,5 +1,13 @@
-import { ICar, ICars, ICarsWinners } from './types/dataInterfaces';
-
+import {
+  ICar,
+  ICars,
+  ICarsWinners,
+  ICarWinner,
+  IState,
+} from './types/dataInterfaces';
+import { activeAnimation } from './utils/animations';
+import { getSecFromMsec } from './utils/time';
+import { getTimeDriveCar } from './utils/utils';
 const apiBasePath = 'http://localhost:3000';
 
 const garagePath = `${apiBasePath}/garage`;
@@ -16,7 +24,7 @@ export const getCars = async (page = 1, limit = 7): Promise<ICars> => {
   };
 };
 
-export const getCar = async (id: number): Promise<ICar> => {
+export const getCar = async (id: number): Promise<ICar | {}> => {
   const response = await fetch(`${garagePath}/${id}`);
   const dataCar = await response.json();
   return dataCar;
@@ -37,7 +45,7 @@ export const createCar = async (insertDataCar: {
   return dataCar;
 };
 
-export const deleteCar = async (id: number) => {
+export const deleteCar = async (id: number): Promise<{}> => {
   const response = await fetch(`${garagePath}/${id}`, {
     method: 'DELETE',
   });
@@ -45,7 +53,11 @@ export const deleteCar = async (id: number) => {
   return dataCar;
 };
 
-export const updateCar = async (id: number, name: string, color: string) => {
+export const updateCar = async (
+  id: number,
+  name: string,
+  color: string
+): Promise<ICar | {}> => {
   const response = await fetch(`${garagePath}/${id}`, {
     method: 'PUT',
     headers: {
@@ -55,6 +67,21 @@ export const updateCar = async (id: number, name: string, color: string) => {
   });
   const dataCar = await response.json();
   return dataCar;
+};
+
+export const startCar = async (
+  state: IState,
+  idCar: number,
+  car: HTMLElement
+) => {
+  const timeInSeconds = await getTimeDriveCar(idCar);
+  const timeInMsec = getSecFromMsec(timeInSeconds);
+  activeAnimation(state, car, timeInMsec);
+  const result = await driveCar(idCar, state.controller.signal);
+  return {
+    result,
+    time: timeInSeconds,
+  };
 };
 
 export const startCarRequest = async (
@@ -75,17 +102,27 @@ export const stopCar = async (id: number) => {
   return dataCar;
 };
 
-export const driveCar = async (id: number) => {
-  const response = await fetch(`${enginePath}?id=${id}&status=drive`, {
-    method: 'PATCH',
-  });
-  return response.status;
-  // const dataCar = await response.json();
-  // return dataCar;
+export const driveCar = async (
+  id: number,
+  signal: AbortSignal
+): Promise<number> => {
+  try {
+    const response = await fetch(`${enginePath}?id=${id}&status=drive`, {
+      method: 'PATCH',
+      signal,
+    });
+    return response.status;
+  } catch (error) {
+    const codeError = (error as DOMException).code;
+    return codeError;
+  }
 };
 
-export const getWinner = async (id: number) => {
+export const getWinner = async (id: number): Promise<ICarWinner | null> => {
   const response = await fetch(`${winnersPath}/${id}`);
+  if (response.status === 404) {
+    return null;
+  }
   const dataCar = await response.json();
   return dataCar;
 };
@@ -107,7 +144,11 @@ export const getWinners = async (
   };
 };
 
-export const createWinner = async (id: number, wins: number, time: number) => {
+export const createWinner = async (
+  id: number,
+  wins: number,
+  time: number
+): Promise<ICarWinner> => {
   const response = await fetch(`${winnersPath}`, {
     method: 'POST',
     headers: {
@@ -119,7 +160,7 @@ export const createWinner = async (id: number, wins: number, time: number) => {
   return dataCar;
 };
 
-export const deleteWinner = async (id: number) => {
+export const deleteWinner = async (id: number): Promise<{}> => {
   const response = await fetch(`${winnersPath}/${id}`, {
     method: 'DELETE',
   });
@@ -127,7 +168,11 @@ export const deleteWinner = async (id: number) => {
   return dataCar;
 };
 
-export const updateWinner = async (id: number, wins: number, time: number) => {
+export const updateWinner = async (
+  id: number,
+  wins: number,
+  time: number
+): Promise<ICarWinner | {}> => {
   const response = await fetch(`${winnersPath}/${id}`, {
     method: 'PUT',
     headers: {

@@ -1,5 +1,5 @@
 import { IState } from 'Src/types/dataInterfaces';
-import { updateCar, getCars } from 'Src/api';
+import { updateCar } from 'Src/api';
 import renderGarage from '../garagePage';
 import { resetUpdateOptions } from 'Src/utils/resetParams';
 import { createElement, updateCars } from 'Src/utils/utils';

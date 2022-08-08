@@ -1,3 +1,5 @@
+import { SortCategory, SortTypes } from 'Src/enum/enum';
+
 export interface ICar {
   name: 'string';
   color: 'string';
@@ -52,8 +54,8 @@ export interface IUiState {
   raceStatus: string;
 }
 
-export type SortType = 'ASC' | 'DESC';
-export type SortCategoryType = 'wins' | 'time';
+export type SortType = SortTypes.ASC | SortTypes.DESC;
+export type SortCategoryType = SortCategory.wins | SortCategory.time;
 
 export interface IState {
   dataCars: ICars;

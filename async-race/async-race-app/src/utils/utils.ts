@@ -136,7 +136,7 @@ export const handleResultDriveCar = async (
     const winner = await getWinner(idCar);
     if (winner) {
       const { wins } = winner;
-      const bestTime = winner.time > time ? time : winner.time;
+      const bestTime = Math.min(winner.time, time);
       await updateWinner(idCar, wins + 1, bestTime);
     } else {
       await createWinner(idCar, 1, time);

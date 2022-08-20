@@ -8,8 +8,7 @@ import {
 } from './types/dataInterfaces';
 import { activeAnimation } from './utils/animations';
 import { getSecFromMsec } from './utils/time';
-import { getTimeDriveCar } from './utils/utils';
-import { MAX_CARS_ON_WINNERS_PAGE, MAX_CARS_ON_GARAGE_PAGE } from './utils/utils';
+import { getTimeDriveCar, MAX_CARS_ON_WINNERS_PAGE, MAX_CARS_ON_GARAGE_PAGE } from './utils/utils';
 
 const apiBasePath = 'http://localhost:3000';
 

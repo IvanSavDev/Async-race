@@ -16,8 +16,8 @@ import {
   calculateAllPagesWinners,
 } from './calculatePages';
 
-export const MAX_ELEMENTS_ON_WINNERS_PAGE = 10;
-export const MAX_ELEMENTS_ON_GARAGE_PAGE = 7;
+export const MAX_CARS_ON_WINNERS_PAGE = 10;
+export const MAX_CARS_ON_GARAGE_PAGE = 7;
 
 export const createElement = (
   elementName: string,

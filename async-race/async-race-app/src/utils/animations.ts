@@ -1,13 +1,13 @@
 import { ICar, IState } from 'Src/types/dataInterfaces';
-import { renderBtnsControlCar, renderCarControl } from 'Src/ui/garage/cars/car';
+import { renderButtonsControlCar, renderCarControl } from 'Src/ui/garage/cars/car';
 
 const draw = (img: HTMLElement, progress: number) => {
-  const widthBtnsContainerCar = 55;
+  const widthButtonsControlCar = 55;
   const widthCar = 100;
   const widthGap = 40;
   const widthMarginRight = 20;
   const widthTrack = document.documentElement.clientWidth;
-  const width = widthTrack - widthBtnsContainerCar - widthCar - widthGap - widthMarginRight;
+  const width = widthTrack - widthButtonsControlCar - widthCar - widthGap - widthMarginRight;
   img.style.left = `${width * progress}px`;
   return width * progress;
 };
@@ -48,7 +48,7 @@ export const animateCar = async (
   };
   const idCar = Number(car.getAttribute('id'));
   uiState.animationsCars[idCar] = animationCar;
-  renderBtnsControlCar(animationCar.drive, car);
+  renderButtonsControlCar(animationCar.drive, car);
   const currentCarImg = car.querySelector('.car__img') as HTMLElement;
   animation(currentCarImg, timeDrive, animationCar);
 };

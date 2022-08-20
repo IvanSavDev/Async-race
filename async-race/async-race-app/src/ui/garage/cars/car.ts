@@ -2,8 +2,8 @@ import { IAnimationCar } from 'Src/types/dataInterfaces';
 import { getCarImg, getFlagImg } from 'Src/utils/getImgs';
 import { createElement } from 'Src/utils/utils';
 
-const generateBtnsEngine = (isDrive: boolean | undefined) => {
-  const containerBtns = createElement('div', { class: 'car__btns-control' });
+const generateButtonsEngine = (isDrive: boolean | undefined) => {
+  const containerButtons = createElement('div', { class: 'car__buttons-control' });
   const carStart = createElement(
     'button',
     { disabled: !!isDrive },
@@ -16,9 +16,9 @@ const generateBtnsEngine = (isDrive: boolean | undefined) => {
     'B',
   );
 
-  containerBtns.append(carStart, carStop);
+  containerButtons.append(carStart, carStop);
 
-  return containerBtns;
+  return containerButtons;
 };
 
 const generateCarInfo = (nameCar: string) => {
@@ -43,7 +43,7 @@ const generateCarControl = (
   isDrive: boolean | undefined,
   posititon: number,
 ) => {
-  const carControlBtn = generateBtnsEngine(isDrive);
+  const carControlBtn = generateButtonsEngine(isDrive);
 
   const carControl = document.createElement('div');
   carControl.classList.add('car__control');
@@ -98,11 +98,11 @@ export const renderCarControl = (
   }
 };
 
-export const renderBtnsControlCar = (isDrive: boolean, car: HTMLElement) => {
-  const btnsControlCar = car.querySelector('.car__btns-control');
-  if (btnsControlCar) {
-    const newBtnsControlCar = generateBtnsEngine(isDrive);
-    btnsControlCar.replaceWith(newBtnsControlCar);
+export const renderButtonsControlCar = (isDrive: boolean, car: HTMLElement) => {
+  const buttonsControlCar = car.querySelector('.car__buttons-control');
+  if (buttonsControlCar) {
+    const newButtonsControlCar = generateButtonsEngine(isDrive);
+    buttonsControlCar.replaceWith(newButtonsControlCar);
   }
 };
 

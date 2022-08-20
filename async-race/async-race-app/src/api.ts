@@ -93,8 +93,8 @@ export const startCar = async (
   car: HTMLElement,
 ) => {
   const timeInSeconds = await getTimeDriveCar(idCar);
-  const timeInMsec = getSecFromMsec(timeInSeconds);
-  activeAnimation(state, car, timeInMsec);
+  const timeInMilliSeconds = getSecFromMsec(timeInSeconds);
+  activeAnimation(state, car, timeInMilliSeconds);
   const result = await driveCar(idCar, state.controller.signal);
   return {
     result,

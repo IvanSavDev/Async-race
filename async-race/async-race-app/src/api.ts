@@ -6,7 +6,7 @@ import {
   ICarWinner,
   IState,
 } from './types/dataInterfaces';
-import { activeAnimation } from './utils/animations';
+import { animateCar } from './utils/animations';
 import { getSecFromMsec } from './utils/time';
 import { getTimeDriveCar, MAX_CARS_ON_WINNERS_PAGE, MAX_CARS_ON_GARAGE_PAGE } from './utils/utils';
 
@@ -94,7 +94,7 @@ export const startCar = async (
 ) => {
   const timeInSeconds = await getTimeDriveCar(idCar);
   const timeInMilliSeconds = getSecFromMsec(timeInSeconds);
-  activeAnimation(state, car, timeInMilliSeconds);
+  animateCar(state, car, timeInMilliSeconds);
   const result = await driveCar(idCar, state.controller.signal);
   return {
     result,

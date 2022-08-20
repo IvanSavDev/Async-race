@@ -35,7 +35,7 @@ const animate = (drawAnimation: (img: HTMLElement, progress: number) => number) 
 
 const animation = animate(draw);
 
-export const activeAnimation = async (
+export const animateCar = async (
   state: IState,
   car: HTMLElement,
   timeDrive: number,

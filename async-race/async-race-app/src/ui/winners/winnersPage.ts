@@ -4,9 +4,9 @@ import {
   IState,
   SortCategoryType,
 } from 'Src/types/dataInterfaces';
-import generatePagination from '../pagination';
 import { updateWinners } from 'Src/utils/utils';
 import { SortCategory, SortTypes } from 'Src/enum/enum';
+import generatePagination from '../pagination';
 
 const sortCategory: {
   'Best time (seconds)': SortCategoryType;
@@ -27,12 +27,11 @@ enum TableHeaders {
 const activeSort = (
   state: IState,
   column: HTMLElement,
-  header: TableHeaders.Wins | TableHeaders.Time
+  header: TableHeaders.Wins | TableHeaders.Time,
 ) => {
   column.addEventListener('click', async () => {
     const currentSortType = state.sortType;
-    const updateSortType =
-      currentSortType === SortTypes.ASC ? SortTypes.DESC : SortTypes.ASC;
+    const updateSortType = currentSortType === SortTypes.ASC ? SortTypes.DESC : SortTypes.ASC;
     state.sortCategory = sortCategory[header];
     state.sortType = updateSortType;
     await updateWinners(state);
@@ -49,10 +48,8 @@ const generateHeaderTable = (state: IState) => {
     column.textContent = header;
     if (header === TableHeaders.Wins || header === TableHeaders.Time) {
       activeSort(state, column, header);
-      const updatedHeader =
-        sortType === SortTypes.ASC ? `${header} ↓` : `${header} ↑`;
-      column.textContent =
-        sortCategory[header] === state.sortCategory ? updatedHeader : header;
+      const updatedHeader = sortType === SortTypes.ASC ? `${header} ↓` : `${header} ↑`;
+      column.textContent = sortCategory[header] === state.sortCategory ? updatedHeader : header;
     }
     return column;
   });
@@ -63,10 +60,12 @@ const generateHeaderTable = (state: IState) => {
 
 const generateBodyTable = (
   winners: Array<ICarWinnerUpdate>,
-  numberPage: number
+  numberPage: number,
 ) => {
   const bodyTable = document.createElement('tbody');
-  const rowsBody = winners.map(({ wins, time, color, name }, index) => {
+  const rowsBody = winners.map(({
+    wins, time, color, name,
+  }, index) => {
     const limitWinnersOnPage = 10;
     const prevPageNumber = numberPage - 1;
     const diffWithPrevPage = prevPageNumber * limitWinnersOnPage;
@@ -112,7 +111,7 @@ const generateWinners = (state: IState) => {
 };
 
 const renderWinners = (state: IState) => {
-  const app = document.querySelector('.container-app')!;
+  const app = document.querySelector('.container-app') as HTMLElement;
   app.replaceChildren(generateWinners(state));
 };
 

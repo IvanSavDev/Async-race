@@ -1,5 +1,4 @@
 import { IState } from 'Src/types/dataInterfaces';
-import renderGarage from './garagePage';
 import {
   createElement,
   generateOneHundredCars,
@@ -7,10 +6,10 @@ import {
   handleResultDriveCar,
 } from 'Src/utils/utils';
 import { calculateAllPagesGarage } from 'Src/utils/calculatePages';
-import { createCar, stopCar } from 'Src/api';
+import { createCar, stopCar, startCar } from 'Src/api';
 import { stopAnimation } from 'Src/utils/animations';
-import { startCar } from 'Src/api';
 import { RaceStatus } from 'Src/enum/enum';
+import renderGarage from './garagePage';
 
 const startRace = (state: IState, race: HTMLElement) => {
   race.addEventListener('click', async () => {
@@ -34,7 +33,7 @@ const stopRace = (state: IState, resetBtn: HTMLElement) => {
     state.controller = new AbortController();
     const cars = document.querySelectorAll('.car') as NodeListOf<HTMLElement>;
     const animations = Array.from(cars).map(async (car) => {
-      const idCar = Number(car.getAttribute('id')!);
+      const idCar = Number(car.getAttribute('id'));
       await stopCar(idCar);
       stopAnimation(state, car, idCar);
     });
@@ -63,21 +62,21 @@ const generateFieldControlRace = (state: IState): HTMLElement => {
   const race = createElement(
     'button',
     raceStatus === RaceStatus.start ? {} : { disabled: 'disabled' },
-    'RACE'
+    'RACE',
   );
   startRace(state, race);
 
   const resetBtn = createElement(
     'button',
     raceStatus === RaceStatus.finished ? {} : { disabled: 'disabled' },
-    'RESET'
+    'RESET',
   );
   stopRace(state, resetBtn);
 
   const generateCarsBtn = createElement(
     'button',
     { class: 'control-race__generate' },
-    'GENERATE CARS'
+    'GENERATE CARS',
   );
   generateCars(state, generateCarsBtn);
 

@@ -1,8 +1,8 @@
 import { createElement, updateCars } from 'Src/utils/utils';
 import { createCar, getCars } from 'Src/api';
 import { IState } from 'Src/types/dataInterfaces';
-import renderGarage from '../garagePage';
 import { resetCreateOptions } from 'Src/utils/resetParams';
+import renderGarage from '../garagePage';
 
 const listenerCreateCar = (element: HTMLElement, state: IState) => {
   element.addEventListener('submit', async (event) => {

@@ -8,7 +8,7 @@
     "build": "webpack --mode=development",
     "build-prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "lint": "eslint ./src"
+    "lint": "npx eslint ./src"
   },
   "keywords": [],
   "author": "",

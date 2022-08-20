@@ -1,14 +1,14 @@
 import { IState } from 'Src/types/dataInterfaces';
 import { getCars } from 'Src/api';
 import { createElement, updateWinners } from 'Src/utils/utils';
+import { Pages } from 'Src/enum/enum';
 import renderGarage from './garage/garagePage';
 import renderWinners from './winners/winnersPage';
-import { Pages } from 'Src/enum/enum';
 
 const listenerSwitchPage = (
   state: IState,
   element: HTMLElement,
-  isPrev: boolean
+  isPrev: boolean,
 ) => {
   const {
     winnersPage,
@@ -16,8 +16,7 @@ const listenerSwitchPage = (
     uiState: { currentPageName },
   } = state;
   element.addEventListener('click', async () => {
-    const countPage =
-      currentPageName === Pages.garage ? garagePage : winnersPage;
+    const countPage = currentPageName === Pages.garage ? garagePage : winnersPage;
     const currentPage = isPrev ? countPage - 1 : countPage + 1;
     if (currentPageName === Pages.garage) {
       state.garagePage = currentPage;
@@ -39,21 +38,19 @@ const generatePagination = (state: IState) => {
     uiState: { garageAllPage, currentPageName, winnersAllPage },
     winnersPage,
   } = state;
-  const currentPage =
-    currentPageName === Pages.garage ? garagePage : winnersPage;
-  const lastPage =
-    currentPageName === Pages.garage ? garageAllPage : winnersAllPage;
+  const currentPage = currentPageName === Pages.garage ? garagePage : winnersPage;
+  const lastPage = currentPageName === Pages.garage ? garageAllPage : winnersAllPage;
   const pagination = createElement('div', { class: 'pagination' });
   const prevPage = createElement(
     'button',
-    { disabled: currentPage === 1 ? true : false },
-    'PREV'
+    { disabled: currentPage === 1 },
+    'PREV',
   );
   listenerSwitchPage(state, prevPage, true);
   const nextPage = createElement(
     'button',
-    { disabled: currentPage >= lastPage ? true : false },
-    'NEXT'
+    { disabled: currentPage >= lastPage },
+    'NEXT',
   );
   listenerSwitchPage(state, nextPage, false);
   pagination.append(prevPage, nextPage);

@@ -8,6 +8,7 @@ import {
 import { activeAnimation } from './utils/animations';
 import { getSecFromMsec } from './utils/time';
 import { getTimeDriveCar } from './utils/utils';
+
 const apiBasePath = 'http://localhost:3000';
 
 const garagePath = `${apiBasePath}/garage`;
@@ -24,7 +25,7 @@ export const getCars = async (page = 1, limit = 7): Promise<ICars> => {
   };
 };
 
-export const getCar = async (id: number): Promise<ICar | {}> => {
+export const getCar = async (id: number): Promise<ICar | Record<string, unknown>> => {
   const response = await fetch(`${garagePath}/${id}`);
   const dataCar = await response.json();
   return dataCar;
@@ -45,7 +46,7 @@ export const createCar = async (insertDataCar: {
   return dataCar;
 };
 
-export const deleteCar = async (id: number): Promise<{}> => {
+export const deleteCar = async (id: number): Promise<Record<string, unknown>> => {
   const response = await fetch(`${garagePath}/${id}`, {
     method: 'DELETE',
   });
@@ -56,8 +57,8 @@ export const deleteCar = async (id: number): Promise<{}> => {
 export const updateCar = async (
   id: number,
   name: string,
-  color: string
-): Promise<ICar | {}> => {
+  color: string,
+): Promise<ICar | Record<string, unknown>> => {
   const response = await fetch(`${garagePath}/${id}`, {
     method: 'PUT',
     headers: {
@@ -69,10 +70,26 @@ export const updateCar = async (
   return dataCar;
 };
 
+export const driveCar = async (
+  id: number,
+  signal: AbortSignal,
+): Promise<number> => {
+  try {
+    const response = await fetch(`${enginePath}?id=${id}&status=drive`, {
+      method: 'PATCH',
+      signal,
+    });
+    return response.status;
+  } catch (error) {
+    const codeError = (error as DOMException).code;
+    return codeError;
+  }
+};
+
 export const startCar = async (
   state: IState,
   idCar: number,
-  car: HTMLElement
+  car: HTMLElement,
 ) => {
   const timeInSeconds = await getTimeDriveCar(idCar);
   const timeInMsec = getSecFromMsec(timeInSeconds);
@@ -85,7 +102,7 @@ export const startCar = async (
 };
 
 export const startCarRequest = async (
-  id: number
+  id: number,
 ): Promise<{ velocity: number; distance: number }> => {
   const response = await fetch(`${enginePath}?id=${id}&status=started`, {
     method: 'PATCH',
@@ -102,22 +119,6 @@ export const stopCar = async (id: number) => {
   return dataCar;
 };
 
-export const driveCar = async (
-  id: number,
-  signal: AbortSignal
-): Promise<number> => {
-  try {
-    const response = await fetch(`${enginePath}?id=${id}&status=drive`, {
-      method: 'PATCH',
-      signal,
-    });
-    return response.status;
-  } catch (error) {
-    const codeError = (error as DOMException).code;
-    return codeError;
-  }
-};
-
 export const getWinner = async (id: number): Promise<ICarWinner | null> => {
   const response = await fetch(`${winnersPath}/${id}`);
   if (response.status === 404) {
@@ -131,10 +132,10 @@ export const getWinners = async (
   page = 1,
   sort = 'wins',
   order = 'ASC',
-  limit = 10
+  limit = 10,
 ): Promise<ICarsWinners> => {
   const response = await fetch(
-    `${winnersPath}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`
+    `${winnersPath}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`,
   );
   const countCars = response.headers.get('X-Total-Count');
   const dataCars = await response.json();
@@ -147,7 +148,7 @@ export const getWinners = async (
 export const createWinner = async (
   id: number,
   wins: number,
-  time: number
+  time: number,
 ): Promise<ICarWinner> => {
   const response = await fetch(`${winnersPath}`, {
     method: 'POST',
@@ -160,7 +161,7 @@ export const createWinner = async (
   return dataCar;
 };
 
-export const deleteWinner = async (id: number): Promise<{}> => {
+export const deleteWinner = async (id: number): Promise<Record<string, unknown>> => {
   const response = await fetch(`${winnersPath}/${id}`, {
     method: 'DELETE',
   });
@@ -171,8 +172,8 @@ export const deleteWinner = async (id: number): Promise<{}> => {
 export const updateWinner = async (
   id: number,
   wins: number,
-  time: number
-): Promise<ICarWinner | {}> => {
+  time: number,
+): Promise<ICarWinner | Record<string, unknown>> => {
   const response = await fetch(`${winnersPath}/${id}`, {
     method: 'PUT',
     headers: {

@@ -4,10 +4,12 @@ import renderGarage from './ui/garage/garagePage';
 import generateSwithPanel from './ui/swithPanel';
 import { updateWinners } from './utils/utils';
 import { calculateAllPagesGarage } from './utils/calculatePages';
-import { Pages, RaceStatus, SortCategory, SortTypes } from './enum/enum';
+import {
+  Pages, RaceStatus, SortCategory, SortTypes,
+} from './enum/enum';
 
 const runApp = async () => {
-  const root = document.getElementById('root')!;
+  const root = document.getElementById('root') as HTMLElement;
 
   const state: IState = {
     dataCars: {

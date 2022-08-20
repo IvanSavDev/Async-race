@@ -1,8 +1,8 @@
 import { IState } from 'Src/types/dataInterfaces';
 import { updateCar } from 'Src/api';
-import renderGarage from '../garagePage';
 import { resetUpdateOptions } from 'Src/utils/resetParams';
 import { createElement, updateCars } from 'Src/utils/utils';
+import renderGarage from '../garagePage';
 
 const listenerUpdateCar = (element: HTMLElement, state: IState) => {
   element.addEventListener('submit', async (event) => {
@@ -10,7 +10,7 @@ const listenerUpdateCar = (element: HTMLElement, state: IState) => {
     const form = event.target as HTMLFormElement;
     const name = form.text.value;
     const color = form.color.value;
-    const selectCar = state.uiState.selectCar!;
+    const selectCar = state.uiState.selectCar as number;
     await updateCar(selectCar, name, color);
     await updateCars(state);
     resetUpdateOptions(state);
@@ -24,14 +24,14 @@ const generateFieldUpdateCar = (state: IState): HTMLElement => {
     updateCar: { name, color },
   } = state;
 
-  const updateCar = createElement('form', { class: 'update-car' });
-  listenerUpdateCar(updateCar, state);
+  const updateCarElement = createElement('form', { class: 'update-car' });
+  listenerUpdateCar(updateCarElement, state);
 
   const updateCarName = createElement('input', {
     type: 'text',
     value: name,
     name: 'text',
-    disabled: selectCar ? false : true,
+    disabled: !selectCar,
   });
   updateCarName.addEventListener('input', ({ target }) => {
     const input = target as HTMLInputElement;
@@ -42,7 +42,7 @@ const generateFieldUpdateCar = (state: IState): HTMLElement => {
     type: 'color',
     value: color,
     name: 'color',
-    disabled: selectCar ? false : true,
+    disabled: !selectCar,
   });
   updateCarColor.addEventListener('input', ({ target }) => {
     const input = target as HTMLInputElement;
@@ -53,9 +53,9 @@ const generateFieldUpdateCar = (state: IState): HTMLElement => {
     'button',
     {
       type: 'submit',
-      disabled: selectCar ? false : true,
+      disabled: !selectCar,
     },
-    'UPDATE'
+    'UPDATE',
   );
   updateCar.append(updateCarName, updateCarColor, updateCarBtn);
 

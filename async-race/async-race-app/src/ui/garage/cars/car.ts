@@ -6,14 +6,14 @@ const generateBtnsEngine = (isDrive: boolean | undefined) => {
   const containerBtns = createElement('div', { class: 'car__btns-control' });
   const carStart = createElement(
     'button',
-    { disabled: isDrive ? true : false },
-    'A'
+    { disabled: !!isDrive },
+    'A',
   );
 
   const carStop = createElement(
     'button',
-    { disabled: isDrive ? false : true },
-    'B'
+    { disabled: !isDrive },
+    'B',
   );
 
   containerBtns.append(carStart, carStop);
@@ -41,7 +41,7 @@ const generateCarInfo = (nameCar: string) => {
 const generateCarControl = (
   color: string,
   isDrive: boolean | undefined,
-  posititon: number
+  posititon: number,
 ) => {
   const carControlBtn = generateBtnsEngine(isDrive);
 
@@ -64,7 +64,7 @@ const generateCar = (
   nameCar: string,
   color: string,
   id: number,
-  animationCar: IAnimationCar
+  animationCar: IAnimationCar,
 ): HTMLDivElement => {
   const carContainer = document.createElement('div');
   carContainer.classList.add('car');
@@ -74,7 +74,7 @@ const generateCar = (
   const carControl = generateCarControl(
     color,
     animationCar?.drive,
-    animationCar?.position
+    animationCar?.position,
   );
 
   carContainer.append(carInfo, carControl);
@@ -85,14 +85,14 @@ const generateCar = (
 export const renderCarControl = (
   car: HTMLElement,
   color: string,
-  animationCar: IAnimationCar
+  animationCar: IAnimationCar,
 ) => {
   const carControl = car.querySelector('.car__control');
   if (carControl) {
     const newCarControl = generateCarControl(
       color,
       animationCar.drive,
-      animationCar.position
+      animationCar.position,
     );
     carControl.replaceWith(newCarControl);
   }

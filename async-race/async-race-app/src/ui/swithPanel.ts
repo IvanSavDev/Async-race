@@ -1,21 +1,20 @@
 import { IState } from 'Src/types/dataInterfaces';
-import { createElement } from 'Src/utils/utils';
+import { createElement, updateWinners } from 'Src/utils/utils';
+import { Pages } from 'Src/enum/enum';
 import renderGarage from './garage/garagePage';
 import renderWinners from './winners/winnersPage';
-import { updateWinners } from 'Src/utils/utils';
-import { Pages } from 'Src/enum/enum';
 
 const generateSwithPanel = (state: IState) => {
   const switchPage = createElement('div', { class: 'switch-page' });
   const switchGarage = createElement(
     'button',
     { class: 'switch-page__garage' },
-    'TO GARAGE'
+    'TO GARAGE',
   );
   const switchWinners = createElement(
     'button',
     { class: 'switch-page__winners' },
-    'TO WINNERS'
+    'TO WINNERS',
   );
   switchGarage.addEventListener('click', () => {
     state.uiState.currentPageName = Pages.garage;

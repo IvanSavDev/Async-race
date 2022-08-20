@@ -8,25 +8,23 @@ import {
   stopCar,
   updateWinner,
 } from 'Src/api';
-import { ICarWinnerUpdate, IState } from '../types/dataInterfaces';
+import { renderControlRace } from 'Src/ui/garage/controlRace';
+import { ICar, ICarWinnerUpdate, IState } from '../types/dataInterfaces';
 import { COUNT_MSEC_IN_SEC } from './time';
 import {
   calculateAllPagesGarage,
   calculateAllPagesWinners,
 } from './calculatePages';
-import { renderControlRace } from 'Src/ui/garage/controlRace';
 
 export const createElement = (
   elementName: string,
   attrs: { [key: string]: string | boolean } = {},
-  text: string = ''
+  text = '',
 ) => {
   const element = document.createElement(elementName);
   Object.keys(attrs).forEach((key) => {
     if (typeof attrs[key] === 'boolean') {
-      if (attrs[key] === false) {
-        return;
-      } else {
+      if (!attrs[key] === false) {
         element.setAttribute(key, key);
       }
     } else {
@@ -37,11 +35,9 @@ export const createElement = (
   return element;
 };
 
-const getRandomNumber = (min: number, max: number) =>
-  Math.round(Math.random() * (max - min) + min);
+const getRandomNumber = (min: number, max: number) => Math.round(Math.random() * (max - min) + min);
 
-const randomColor = () =>
-  `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+const randomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 
 export const getTimeDriveCar = async (idCar: number) => {
   const { velocity, distance } = await startCarRequest(idCar);
@@ -114,7 +110,7 @@ export const handleResultDriveCar = async (
   state: IState,
   result: number,
   idCar: number,
-  time: number
+  time: number,
 ) => {
   const {
     uiState: { animationsCars },
@@ -131,7 +127,7 @@ export const handleResultDriveCar = async (
 
   if (result === 200 && uiState.raceStatus === 'process' && isDrive) {
     uiState.raceStatus = 'finished';
-    const currentCar = cars.find(({ id }) => id === idCar)!;
+    const currentCar = cars.find(({ id }) => id === idCar) as ICar;
     alert(`${currentCar.name} wont first! Time: ${time}`);
     renderControlRace(state);
     const winner = await getWinner(idCar);

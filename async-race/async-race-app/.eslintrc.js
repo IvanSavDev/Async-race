@@ -19,5 +19,7 @@ module.exports = {
   rules: {
     'import/prefer-default-export': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
+    'no-param-reassign': 'off',
+    'no-alert': 'off'
   },
 };

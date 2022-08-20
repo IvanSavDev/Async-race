@@ -61,14 +61,14 @@ const generateFieldControlRace = (state: IState): HTMLElement => {
 
   const race = createElement(
     'button',
-    raceStatus === RaceStatus.start ? {} : { disabled: 'disabled' },
+    { disabled: raceStatus !== RaceStatus.start  },
     'RACE',
   );
   startRace(state, race);
 
   const resetBtn = createElement(
     'button',
-    raceStatus === RaceStatus.finished ? {} : { disabled: 'disabled' },
+    { disabled: raceStatus !== RaceStatus.finished },
     'RESET',
   );
   stopRace(state, resetBtn);

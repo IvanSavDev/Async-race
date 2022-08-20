@@ -1,3 +1,4 @@
+import { SortCategory, SortTypes } from './enum/enum';
 import {
   ICar,
   ICars,
@@ -8,6 +9,7 @@ import {
 import { activeAnimation } from './utils/animations';
 import { getSecFromMsec } from './utils/time';
 import { getTimeDriveCar } from './utils/utils';
+import { MAX_CARS_ON_WINNERS_PAGE, MAX_CARS_ON_GARAGE_PAGE } from './utils/utils';
 
 const apiBasePath = 'http://localhost:3000';
 
@@ -15,7 +17,7 @@ const garagePath = `${apiBasePath}/garage`;
 const winnersPath = `${apiBasePath}/winners`;
 const enginePath = `${apiBasePath}/engine`;
 
-export const getCars = async (page = 1, limit = 7): Promise<ICars> => {
+export const getCars = async (page = 1, limit = MAX_CARS_ON_GARAGE_PAGE): Promise<ICars> => {
   const response = await fetch(`${garagePath}?_page=${page}&_limit=${limit}`);
   const countCars = response.headers.get('X-Total-Count');
   const dataCars = await response.json();
@@ -130,9 +132,9 @@ export const getWinner = async (id: number): Promise<ICarWinner | null> => {
 
 export const getWinners = async (
   page = 1,
-  sort = 'wins',
-  order = 'ASC',
-  limit = 10,
+  sort = SortCategory.wins,
+  order = SortTypes.ASC,
+  limit = MAX_CARS_ON_WINNERS_PAGE,
 ): Promise<ICarsWinners> => {
   const response = await fetch(
     `${winnersPath}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`,

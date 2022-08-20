@@ -6,12 +6,7 @@ const draw = (img: HTMLElement, progress: number) => {
   const widthCar = 100;
   const widthGap = 40;
   const widthMarginRight = 20;
-  const width =
-    document.documentElement.clientWidth -
-    widthBtnsContainerCar -
-    widthCar -
-    widthGap -
-    widthMarginRight;
+  const width = document.documentElement.clientWidth - widthBtnsContainerCar - widthCar - widthGap - widthMarginRight;
   img.style.left = `${width * progress}px`;
   return width * progress;
 };

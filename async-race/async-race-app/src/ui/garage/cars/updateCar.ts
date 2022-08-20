@@ -57,9 +57,9 @@ const generateFieldUpdateCar = (state: IState): HTMLElement => {
     },
     'UPDATE',
   );
-  updateCar.append(updateCarName, updateCarColor, updateCarBtn);
+  updateCarElement.append(updateCarName, updateCarColor, updateCarBtn);
 
-  return updateCar;
+  return updateCarElement;
 };
 
 export default generateFieldUpdateCar;

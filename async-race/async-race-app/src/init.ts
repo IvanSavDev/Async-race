@@ -1,7 +1,7 @@
 import { getCars } from './api';
 import { IState } from './types/dataInterfaces';
 import renderGarage from './ui/garage/garagePage';
-import generateSwithPanel from './ui/swithPanel';
+import generateSwitchPanel from './ui/switchPanel';
 import { updateWinners } from './utils/utils';
 import { calculateAllPagesGarage } from './utils/calculatePages';
 import {
@@ -45,7 +45,7 @@ const runApp = async () => {
 
   const mainContainer = document.createElement('div');
   mainContainer.classList.add('container-app');
-  root.append(generateSwithPanel(state), mainContainer);
+  root.append(generateSwitchPanel(state), mainContainer);
 
   const dataCars = await getCars();
   if (dataCars) {

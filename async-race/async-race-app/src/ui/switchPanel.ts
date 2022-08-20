@@ -4,7 +4,7 @@ import { Pages } from 'Src/enum/enum';
 import renderGarage from './garage/garagePage';
 import renderWinners from './winners/winnersPage';
 
-const generateSwithPanel = (state: IState) => {
+const generateSwitchPanel = (state: IState) => {
   const switchPage = createElement('div', { class: 'switch-page' });
   const switchGarage = createElement(
     'button',
@@ -31,4 +31,4 @@ const generateSwithPanel = (state: IState) => {
   return switchPage;
 };
 
-export default generateSwithPanel;
+export default generateSwitchPanel;

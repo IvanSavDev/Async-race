@@ -61,7 +61,7 @@ const generateFieldControlRace = (state: IState): HTMLElement => {
 
   const race = createElement(
     'button',
-    { disabled: raceStatus !== RaceStatus.start  },
+    { disabled: raceStatus !== RaceStatus.start },
     'RACE',
   );
   startRace(state, race);

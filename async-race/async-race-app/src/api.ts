@@ -18,18 +18,18 @@ const enginePath = `${apiBasePath}/engine`;
 
 export const getCars = async (page = 1, limit = MAX_CARS_ON_GARAGE_PAGE): Promise<ICars> => {
   const response = await fetch(`${garagePath}?_page=${page}&_limit=${limit}`);
-  const countCars = response.headers.get('X-Total-Count');
-  const dataCars = await response.json();
+  const carsCount = response.headers.get('X-Total-Count');
+  const carsData = await response.json();
   return {
-    cars: dataCars,
-    count: Number(countCars),
+    cars: carsData,
+    count: Number(carsCount),
   };
 };
 
 export const getCar = async (id: number): Promise<ICar | Record<string, unknown>> => {
   const response = await fetch(`${garagePath}/${id}`);
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const createCar = async (insertDataCar: {
@@ -43,16 +43,16 @@ export const createCar = async (insertDataCar: {
     },
     body: JSON.stringify(insertDataCar),
   });
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const deleteCar = async (id: number): Promise<Record<string, unknown>> => {
   const response = await fetch(`${garagePath}/${id}`, {
     method: 'DELETE',
   });
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const updateCar = async (
@@ -67,8 +67,8 @@ export const updateCar = async (
     },
     body: JSON.stringify({ name, color }),
   });
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const driveCar = async (
@@ -108,16 +108,16 @@ export const startCarRequest = async (
   const response = await fetch(`${enginePath}?id=${id}&status=started`, {
     method: 'PATCH',
   });
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const stopCar = async (id: number) => {
   const response = await fetch(`${enginePath}?id=${id}&status=stopped`, {
     method: 'PATCH',
   });
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const getWinner = async (id: number): Promise<ICarWinner | null> => {
@@ -125,8 +125,8 @@ export const getWinner = async (id: number): Promise<ICarWinner | null> => {
   if (response.status === 404) {
     return null;
   }
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const getWinners = async (
@@ -138,11 +138,11 @@ export const getWinners = async (
   const response = await fetch(
     `${winnersPath}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`,
   );
-  const countCars = response.headers.get('X-Total-Count');
-  const dataCars = await response.json();
+  const carsCount = response.headers.get('X-Total-Count');
+  const carsData = await response.json();
   return {
-    winners: dataCars,
-    count: Number(countCars),
+    winners: carsData,
+    count: Number(carsCount),
   };
 };
 
@@ -158,16 +158,16 @@ export const createWinner = async (
     },
     body: JSON.stringify({ id, wins, time }),
   });
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const deleteWinner = async (id: number): Promise<Record<string, unknown>> => {
   const response = await fetch(`${winnersPath}/${id}`, {
     method: 'DELETE',
   });
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };
 
 export const updateWinner = async (
@@ -182,6 +182,6 @@ export const updateWinner = async (
     },
     body: JSON.stringify({ wins, time }),
   });
-  const dataCar = await response.json();
-  return dataCar;
+  const carData = await response.json();
+  return carData;
 };

@@ -62,7 +62,7 @@ export const generateOneHundredCars = () => {
     'Q5',
     'K5',
   ];
-  const modeslCars = [
+  const carModels = [
     'Lada',
     'Kia',
     'Hyundai',
@@ -78,7 +78,7 @@ export const generateOneHundredCars = () => {
   return elements.map(() => {
     const index = getRandomNumber(0, 9);
     return {
-      name: `${modeslCars[index]} ${nameCars[index]}`,
+      name: `${carModels[index]} ${nameCars[index]}`,
       color: randomColor(),
     };
   });

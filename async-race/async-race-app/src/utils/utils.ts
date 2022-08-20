@@ -4,7 +4,7 @@ import {
   getCars,
   getWinner,
   getWinners,
-  startCarRequest,
+  getRaceData,
   stopCar,
   updateWinner,
 } from 'Src/api';
@@ -43,7 +43,7 @@ const getRandomNumber = (min: number, max: number) => Math.round(Math.random() *
 const randomColor = () => `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 
 export const getTimeDriveCar = async (idCar: number) => {
-  const { velocity, distance } = await startCarRequest(idCar);
+  const { velocity, distance } = await getRaceData(idCar);
   const timeDrive = distance / velocity;
   const timeDriveInSeconds = Number((timeDrive / COUNT_MSEC_IN_SEC).toFixed(2));
   return timeDriveInSeconds;

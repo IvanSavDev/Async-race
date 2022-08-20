@@ -102,14 +102,14 @@ export const startCar = async (
   };
 };
 
-export const startCarRequest = async (
+export const getRaceData = async (
   id: number,
 ): Promise<{ velocity: number; distance: number }> => {
   const response = await fetch(`${enginePath}?id=${id}&status=started`, {
     method: 'PATCH',
   });
-  const carData = await response.json();
-  return carData;
+  const raceData = await response.json();
+  return raceData;
 };
 
 export const stopCar = async (id: number) => {

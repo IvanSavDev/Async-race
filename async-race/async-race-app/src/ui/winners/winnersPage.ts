@@ -1,43 +1,8 @@
 import { getCarImg } from 'Src/utils/getImgs';
-import {
-  ICarWinnerUpdate,
-  IState,
-  SortCategoryType,
-} from 'Src/types/dataInterfaces';
-import { updateWinners } from 'Src/utils/utils';
+import { ICarWinnerUpdate, IState } from 'Src/types/dataInterfaces';
 import { SortCategory, SortTypes } from 'Src/enum/enum';
 import generatePagination from '../pagination';
-
-const sortCategory: {
-  'Best time (seconds)': SortCategoryType;
-  Wins: SortCategoryType;
-} = {
-  'Best time (seconds)': SortCategory.time,
-  Wins: SortCategory.wins,
-};
-
-enum TableHeaders {
-  Number = 'Number',
-  Car = 'Car',
-  Name = 'Name',
-  Wins = 'Wins',
-  Time = 'Best time (seconds)',
-}
-
-const activeSort = (
-  state: IState,
-  column: HTMLElement,
-  header: TableHeaders.Wins | TableHeaders.Time,
-) => {
-  column.addEventListener('click', async () => {
-    const currentSortType = state.sortType;
-    const updateSortType = currentSortType === SortTypes.ASC ? SortTypes.DESC : SortTypes.ASC;
-    state.sortCategory = sortCategory[header];
-    state.sortType = updateSortType;
-    await updateWinners(state);
-    renderWinners(state);
-  });
-};
+import { sortCategory, TableHeaders } from './winnersEnum';
 
 const generateHeaderTable = (state: IState) => {
   const { sortType } = state;
@@ -47,7 +12,11 @@ const generateHeaderTable = (state: IState) => {
     const column = document.createElement('th');
     column.textContent = header;
     if (header === TableHeaders.Wins || header === TableHeaders.Time) {
-      activeSort(state, column, header);
+      if (header === TableHeaders.Wins) {
+        column.setAttribute('id', SortCategory.wins);
+      } else {
+        column.setAttribute('id', SortCategory.time);
+      }
       const updatedHeader = sortType === SortTypes.ASC ? `${header} ↓` : `${header} ↑`;
       column.textContent = sortCategory[header] === state.sortCategory ? updatedHeader : header;
     }
@@ -90,7 +59,7 @@ const generateBodyTable = (
   return bodyTable;
 };
 
-const generateWinners = (state: IState) => {
+export const generateWinners = (state: IState) => {
   const {
     winnersPage,
     dataWinners: { count, winners },
@@ -109,10 +78,3 @@ const generateWinners = (state: IState) => {
   container.append(countCar, countPage, table, pagination);
   return container;
 };
-
-const renderWinners = (state: IState) => {
-  const app = document.querySelector('.container-app') as HTMLElement;
-  app.replaceChildren(generateWinners(state));
-};
-
-export default renderWinners;

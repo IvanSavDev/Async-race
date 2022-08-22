@@ -1,4 +1,5 @@
 import { IState } from 'Src/types/dataInterfaces';
+import { createElement } from 'Src/utils/utils';
 import generatePagination from 'Src/view/pagination';
 import generateCar from './car';
 
@@ -9,12 +10,9 @@ const generateListCars = (state: IState) => {
     dataCars: { count, cars: dataCars },
   } = state;
   const container = document.createElement('div');
-  const garageCount = document.createElement('h2');
-  garageCount.textContent = `Garage (${count})`;
-  const pageCount = document.createElement('h3');
-  pageCount.textContent = `Page #${garagePage}`;
-  const listCars = document.createElement('div');
-  listCars.classList.add('list-cars');
+  const garageCount = createElement('h2', {}, `Garage (${count})`);
+  const pageCount = createElement('h3', {}, `Page #${garagePage}`);
+  const listCars = createElement('div', { class: 'list-cars' });
   const cars = dataCars
     .map(({ name, color, id }) => generateCar(name, color, id, animationsCars[id]));
   listCars.append(...cars);

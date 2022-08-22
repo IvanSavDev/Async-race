@@ -23,13 +23,9 @@ export const generateButtonsEngine = (isDrive: boolean | undefined) => {
 
 const generateCarInfo = (nameCar: string) => {
   const carInfo = document.createElement('div');
-  const selectCar = document.createElement('button');
-  selectCar.textContent = 'SELECT';
-  const removeCar = document.createElement('button');
-  removeCar.textContent = 'REMOVE';
-  const carName = document.createElement('span');
-  carName.classList.add('car__name');
-  carName.textContent = nameCar;
+  const selectCar = createElement('button', {}, 'SELECT');
+  const removeCar = createElement('button', {}, 'REMOVE');
+  const carName = createElement('span', { class: 'car__name' }, nameCar);
   carInfo.append(selectCar, removeCar, carName);
 
   return carInfo;
@@ -41,15 +37,13 @@ export const generateCarControl = (
   posititon: number,
 ) => {
   const carControlBtn = generateButtonsEngine(isDrive);
-  const carControl = document.createElement('div');
-  carControl.classList.add('car__control');
-  const flagImgContainer = document.createElement('div');
-  flagImgContainer.classList.add('car__flag-img');
-  flagImgContainer.innerHTML = getFlagImg();
-  const carImgContainer = document.createElement('div');
-  carImgContainer.classList.add('car__img');
-  carImgContainer.innerHTML = getCarImg(color);
-  carImgContainer.style.left = `${posititon}px`;
+  const carControl = createElement('div', { class: 'car__control' });
+  const flagImgContainer = createElement('div', { class: 'car__flag-img' }, getFlagImg());
+  const carImgContainer = createElement(
+    'div',
+    { class: 'car__img', style: `left: ${posititon}px` },
+    getCarImg(color),
+  );
   carControl.append(carControlBtn, carImgContainer, flagImgContainer);
 
   return carControl;
@@ -60,11 +54,8 @@ const generateCar = (
   color: string,
   id: number,
   animationCar: IAnimationCar,
-): HTMLDivElement => {
-  const carContainer = document.createElement('div');
-  carContainer.classList.add('car');
-  carContainer.setAttribute('id', String(id));
-
+): HTMLElement => {
+  const carContainer = createElement('div', { class: 'car', id: String(id) });
   const carInfo = generateCarInfo(nameCar);
   const carControl = generateCarControl(
     color,

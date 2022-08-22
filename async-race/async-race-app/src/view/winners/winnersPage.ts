@@ -1,8 +1,15 @@
 import { getCarImg } from 'Src/utils/getImgs';
-import { ICarWinnerUpdate, IState } from 'Src/types/dataInterfaces';
-import { SortCategory, SortTypes } from 'Src/enum/enum';
+import { ICarWinnerUpdate, IState, SortCategoryType } from 'Src/types/dataInterfaces';
+import { SortCategory, SortTypes, TableHeaders } from 'Src/enum/enum';
 import generatePagination from '../pagination';
-import { sortCategory, TableHeaders } from './winnersEnum';
+
+const tableHeadersSortCategories: {
+  'Best time (seconds)': SortCategoryType;
+  Wins: SortCategoryType;
+} = {
+  'Best time (seconds)': SortCategory.time,
+  Wins: SortCategory.wins,
+};
 
 const generateHeaderTable = (state: IState) => {
   const { sortType } = state;
@@ -18,7 +25,7 @@ const generateHeaderTable = (state: IState) => {
         column.setAttribute('id', SortCategory.time);
       }
       const updatedHeader = sortType === SortTypes.ASC ? `${header} ↓` : `${header} ↑`;
-      column.textContent = sortCategory[header] === state.sortCategory ? updatedHeader : header;
+      column.textContent = tableHeadersSortCategories[header] === state.sortCategory ? updatedHeader : header;
     }
     return column;
   });

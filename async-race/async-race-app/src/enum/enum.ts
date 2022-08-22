@@ -18,3 +18,11 @@ export enum RaceStatus {
   process = 'process',
   finished = 'finished',
 }
+
+export enum TableHeaders {
+  Number = 'Number',
+  Car = 'Car',
+  Name = 'Name',
+  Wins = 'Wins',
+  Time = 'Best time (seconds)',
+}

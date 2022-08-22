@@ -11,13 +11,16 @@ import {
 import { renderControlRace } from 'Src/ui/garage/controlRace';
 import { ICar, ICarWinnerUpdate, IState } from '../types/dataInterfaces';
 import { COUNT_MSEC_IN_SEC } from './time';
-import {
-  calculateAllPagesGarage,
-  calculateAllPagesWinners,
-} from './calculatePages';
 
 export const MAX_CARS_ON_WINNERS_PAGE = 10;
 export const MAX_CARS_ON_GARAGE_PAGE = 7;
+
+export const calculateAllPagesGarage = (state: IState) => (
+  Math.ceil(state.dataCars.count / MAX_CARS_ON_GARAGE_PAGE)
+);
+export const calculateAllPagesWinners = (state: IState) => (
+  Math.ceil(state.dataWinners.count / MAX_CARS_ON_WINNERS_PAGE)
+);
 
 export const createElement = (
   elementName: string,

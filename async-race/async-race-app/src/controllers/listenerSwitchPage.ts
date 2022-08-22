@@ -2,7 +2,6 @@ import { IState } from 'Src/types/dataInterfaces';
 import { updateWinners } from 'Src/utils/utils';
 import { Pages } from 'Src/enum/enum';
 import { getCars } from 'Src/api';
-import renderGarage from '../garage/garagePage';
 
 const listenerSwitchPage = (
   state: IState,
@@ -22,7 +21,7 @@ const listenerSwitchPage = (
       state.garagePage = currentPage;
       const carsData = await getCars(currentPage);
       state.dataCars = carsData;
-      renderGarage(state);
+      render(state);
     }
     if (currentPageName === Pages.winners) {
       state.winnersPage = currentPage;

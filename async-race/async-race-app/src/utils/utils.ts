@@ -8,8 +8,8 @@ import {
   stopCar,
   updateWinner,
 } from 'Src/api';
-import { renderControlRace } from 'Src/ui/garage/controlRace';
-import { ICar, ICarWinnerUpdate, IState } from '../types/dataInterfaces';
+import renderControlRace from 'Src/view/garage/renderControlRace';
+import { ICar, ICarWinnerUpdate, IState } from 'Src/types/dataInterfaces';
 import { COUNT_MSEC_IN_SEC } from './time';
 
 export const MAX_CARS_ON_WINNERS_PAGE = 10;

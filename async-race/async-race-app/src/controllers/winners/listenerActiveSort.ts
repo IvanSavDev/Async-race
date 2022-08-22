@@ -2,7 +2,7 @@ import { IState, SortCategoryType } from 'Src/types/dataInterfaces';
 import { updateWinners } from 'Src/utils/utils';
 import { SortTypes } from 'Src/enum/enum';
 
-export const activeSort = (
+const listenerActiveSort = (
   state: IState,
   columns: Array<HTMLElement>,
   render: (state: IState) => void,
@@ -19,3 +19,5 @@ export const activeSort = (
     });
   });
 };
+
+export default listenerActiveSort;

@@ -1,25 +1,5 @@
-import { createElement, updateCars } from 'Src/utils/utils';
-import { createCar, getCars } from 'Src/api';
+import { createElement } from 'Src/utils/utils';
 import { IState } from 'Src/types/dataInterfaces';
-import { resetCreateOptions } from 'Src/utils/resetParams';
-import renderGarage from '../garagePage';
-
-const listenerCreateCar = (element: HTMLElement, state: IState) => {
-  element.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const form = event.target as HTMLFormElement;
-    const name = form.text.value;
-    const color = form.color.value;
-    await createCar({ name, color });
-    const currentPage = state.garagePage;
-    const newCar = await getCars(currentPage);
-    if (newCar) {
-      resetCreateOptions(state);
-      await updateCars(state);
-      renderGarage(state);
-    }
-  });
-};
 
 const generateFieldCreateCar = (state: IState): HTMLElement => {
   const {
@@ -27,7 +7,6 @@ const generateFieldCreateCar = (state: IState): HTMLElement => {
   } = state;
 
   const createCarForm = createElement('form', { class: 'create-car' });
-  listenerCreateCar(createCarForm, state);
 
   const createCarName = createElement('input', {
     type: 'text',

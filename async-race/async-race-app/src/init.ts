@@ -1,9 +1,8 @@
 import { getCars } from './api';
 import { IState } from './types/dataInterfaces';
-import renderGarage from './ui/garage/garagePage';
-import generateSwitchPanel from './ui/switchPanel';
-import { updateWinners } from './utils/utils';
-import { calculateAllPagesGarage } from './utils/calculatePages';
+import renderGarage from './view/garage/renderGarage';
+import generateSwitchPanel from './view/switchPanel';
+import { updateWinners, calculateAllPagesGarage } from './utils/utils';
 import {
   Pages, RaceStatus, SortCategory, SortTypes,
 } from './enum/enum';

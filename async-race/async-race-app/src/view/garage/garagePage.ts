@@ -2,7 +2,6 @@ import { IState } from 'Src/types/dataInterfaces';
 import generateFieldCreateCar from './cars/createCar';
 import generateFieldUpdateCar from './cars/updateCar';
 import generateFieldControlRace from './controlRace';
-import generateListCars from './cars/listCar';
 
 const generateControlPanel = (state: IState): HTMLElement => {
   const container = document.createElement('div');
@@ -15,14 +14,4 @@ const generateControlPanel = (state: IState): HTMLElement => {
   return container;
 };
 
-const renderGarage = (state: IState) => {
-  const garage = document.createElement('div');
-  const app = document.querySelector('.container-app');
-  garage.classList.add('garage-page');
-  garage.append(generateControlPanel(state), generateListCars(state));
-  if (app) {
-    app.replaceChildren(garage);
-  }
-};
-
-export default renderGarage;
+export default generateControlPanel;

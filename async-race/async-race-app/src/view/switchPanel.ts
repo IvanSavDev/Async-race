@@ -1,8 +1,8 @@
 import { IState } from 'Src/types/dataInterfaces';
 import { createElement, updateWinners } from 'Src/utils/utils';
 import { Pages } from 'Src/enum/enum';
-import renderGarage from './garage/garagePage';
-import renderWinners from './winners/winnersPage';
+import renderGarage from './garage/renderGarage';
+import renderWinners from './winners/renderWinners';
 
 const generateSwitchPanel = (state: IState) => {
   const switchPage = createElement('div', { class: 'switch-page' });

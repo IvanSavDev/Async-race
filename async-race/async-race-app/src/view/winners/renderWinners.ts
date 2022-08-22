@@ -1,7 +1,7 @@
 import { IState } from 'Src/types/dataInterfaces';
 import { SortCategory } from 'Src/enum/enum';
-import { activeSort } from './activeSort';
-import listenerSwitchPage from './switchPage';
+import listenerActiveSort from 'Src/controllers/winners/listenerActiveSort';
+import listenerSwitchPage from 'Src/controllers/listenerSwitchPage';
 import { generateWinners } from './winnersPage';
 
 const renderWinners = (state: IState) => {
@@ -18,7 +18,7 @@ const renderWinners = (state: IState) => {
   listenerSwitchPage(state, prevButton, true, renderWinners);
   listenerSwitchPage(state, nextButton, false, renderWinners);
   if (winnersColumn && timeColumn) {
-    activeSort(state, [winnersColumn, timeColumn], renderWinners);
+    listenerActiveSort(state, [winnersColumn, timeColumn], renderWinners);
   }
   app.replaceChildren(winnersPage);
 };

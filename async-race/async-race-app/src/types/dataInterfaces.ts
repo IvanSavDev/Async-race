@@ -69,3 +69,5 @@ export interface IState {
   uiState: IUiState;
   controller: AbortController;
 }
+
+export type RenderType = (state: IState) => void;

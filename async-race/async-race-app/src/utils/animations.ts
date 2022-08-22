@@ -1,5 +1,6 @@
 import { ICar, IState } from 'Src/types/dataInterfaces';
-import { renderButtonsControlCar, renderCarControl } from 'Src/ui/garage/cars/car';
+import renderButtonsControlCar from 'Src/view/garage/cars/renderButtonsControlCar';
+import renderCarControl from 'Src/view/garage/cars/renderCarControl';
 
 const draw = (img: HTMLElement, progress: number) => {
   const widthButtonsControlCar = 55;

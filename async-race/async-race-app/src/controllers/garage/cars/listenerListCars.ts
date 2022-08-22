@@ -1,14 +1,11 @@
 import {
   deleteCar, deleteWinner, stopCar, startCar,
 } from 'Src/api';
-import { ICar, IState } from 'Src/types/dataInterfaces';
+import { ICar, IState, RenderType } from 'Src/types/dataInterfaces';
 import { updateCars } from 'Src/utils/utils';
-import generatePagination from 'Src/ui/pagination';
 import { stopAnimation } from 'Src/utils/animations';
-import generateCar from './car';
-import renderGarage from '../garagePage';
 
-const listenListCars = (state: IState, element: HTMLElement) => {
+const listenerListCars = (state: IState, element: HTMLElement, render: RenderType) => {
   element.addEventListener('click', async ({ target }) => {
     const {
       dataCars, uiState, updateCar, garagePage,
@@ -25,7 +22,7 @@ const listenListCars = (state: IState, element: HTMLElement) => {
       uiState.selectCar = idCar;
       updateCar.color = color;
       updateCar.name = name;
-      renderGarage(state);
+      render(state);
     }
     if (
       selectedElement.tagName === 'BUTTON'
@@ -38,7 +35,7 @@ const listenListCars = (state: IState, element: HTMLElement) => {
         state.garagePage -= 1;
       }
       await updateCars(state);
-      renderGarage(state);
+      render(state);
     }
     if (
       selectedElement.tagName === 'BUTTON'
@@ -58,26 +55,4 @@ const listenListCars = (state: IState, element: HTMLElement) => {
   });
 };
 
-const generateListCars = (state: IState) => {
-  const {
-    garagePage,
-    uiState: { animationsCars },
-    dataCars: { count, cars: dataCars },
-  } = state;
-  const container = document.createElement('div');
-  const garageCount = document.createElement('h2');
-  garageCount.textContent = `Garage (${count})`;
-  const pageCount = document.createElement('h3');
-  pageCount.textContent = `Page #${garagePage}`;
-  const listCars = document.createElement('div');
-  listCars.classList.add('list-cars');
-  listenListCars(state, listCars);
-  const cars = dataCars
-    .map(({ name, color, id }) => generateCar(name, color, id, animationsCars[id]));
-  listCars.append(...cars);
-  const pagination = generatePagination(state);
-  container.append(garageCount, pageCount, listCars, pagination);
-  return container;
-};
-
-export default generateListCars;
+export default listenerListCars;

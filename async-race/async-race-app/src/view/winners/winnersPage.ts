@@ -25,7 +25,9 @@ const generateHeaderTable = (state: IState) => {
         column.setAttribute('id', SortCategory.time);
       }
       const updatedHeader = sortType === SortTypes.ASC ? `${header} ↓` : `${header} ↑`;
-      column.textContent = tableHeadersSortCategories[header] === state.sortCategory ? updatedHeader : header;
+      column.textContent = tableHeadersSortCategories[header] === state.sortCategory
+        ? updatedHeader
+        : header;
     }
     return column;
   });

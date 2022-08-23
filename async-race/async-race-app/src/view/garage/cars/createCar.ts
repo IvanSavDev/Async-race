@@ -29,9 +29,9 @@ const generateFieldCreateCar = (state: IState): HTMLElement => {
     state.createCar.color = input.value;
   });
 
-  const createCarBtn = createElement('button', {}, 'CREATE');
+  const createCarButton = createElement('button', {}, 'CREATE');
 
-  createCarForm.append(createCarName, createCarColor, createCarBtn);
+  createCarForm.append(createCarName, createCarColor, createCarButton);
 
   return createCarForm;
 };

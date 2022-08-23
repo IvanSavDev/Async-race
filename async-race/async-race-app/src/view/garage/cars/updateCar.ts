@@ -31,7 +31,7 @@ const generateFieldUpdateCar = (state: IState): HTMLElement => {
     state.updateCar.color = input.value;
   });
 
-  const updateCarBtn = createElement(
+  const updateCarButton = createElement(
     'button',
     {
       type: 'submit',
@@ -39,7 +39,7 @@ const generateFieldUpdateCar = (state: IState): HTMLElement => {
     },
     'UPDATE',
   );
-  updateCarElement.append(updateCarName, updateCarColor, updateCarBtn);
+  updateCarElement.append(updateCarName, updateCarColor, updateCarButton);
 
   return updateCarElement;
 };

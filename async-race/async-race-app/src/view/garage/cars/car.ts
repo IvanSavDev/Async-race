@@ -36,7 +36,7 @@ export const generateCarControl = (
   isDrive: boolean | undefined,
   posititon: number,
 ) => {
-  const carControlBtn = generateButtonsEngine(isDrive);
+  const carControlButton = generateButtonsEngine(isDrive);
   const carControl = createElement('div', { class: 'car__control' });
   const flagImgContainer = createElement('div', { class: 'car__flag-img' }, getFlagImg());
   const carImgContainer = createElement(
@@ -44,7 +44,7 @@ export const generateCarControl = (
     { class: 'car__img', style: `left: ${posititon}px` },
     getCarImg(color),
   );
-  carControl.append(carControlBtn, carImgContainer, flagImgContainer);
+  carControl.append(carControlButton, carImgContainer, flagImgContainer);
 
   return carControl;
 };

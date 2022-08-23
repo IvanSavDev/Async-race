@@ -6,8 +6,8 @@ import {
 } from 'Src/utils/utils';
 import { createCar } from 'Src/api';
 
-const listenerGenerateCars = (state: IState, generateCarsBtn: HTMLElement, render: RenderType) => {
-  generateCarsBtn.addEventListener('click', async () => {
+const listenerGenerateCars = (state: IState, generateCarsButton: HTMLElement, render: RenderType) => {
+  generateCarsButton.addEventListener('click', async () => {
     const createCars = generateOneHundredCars().map((car) => createCar(car));
     await Promise.all(createCars);
     await updateCars(state);

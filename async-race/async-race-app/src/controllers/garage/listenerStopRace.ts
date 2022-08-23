@@ -3,8 +3,8 @@ import { stopCar } from 'Src/api';
 import { stopAnimateCar } from 'Src/utils/animations';
 import { RaceStatus } from 'Src/enum/enum';
 
-const listenerStopRace = (state: IState, resetBtn: HTMLElement, render: RenderType) => {
-  resetBtn.addEventListener('click', async () => {
+const listenerStopRace = (state: IState, resetButton: HTMLElement, render: RenderType) => {
+  resetButton.addEventListener('click', async () => {
     state.controller.abort();
     render(state);
     state.controller = new AbortController();

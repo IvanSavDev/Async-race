@@ -17,7 +17,7 @@ const generateFieldControlRace = (state: IState): HTMLElement => {
     'RACE',
   );
 
-  const resetBtn = createElement(
+  const resetButton = createElement(
     'button',
     {
       disabled: raceStatus !== RaceStatus.finished,
@@ -26,7 +26,7 @@ const generateFieldControlRace = (state: IState): HTMLElement => {
     'RESET',
   );
 
-  const generateCarsBtn = createElement(
+  const generateCarsButton = createElement(
     'button',
     {
       class: 'control-race__generate',
@@ -35,7 +35,7 @@ const generateFieldControlRace = (state: IState): HTMLElement => {
     'GENERATE CARS',
   );
 
-  controlRace.append(race, resetBtn, generateCarsBtn);
+  controlRace.append(race, resetButton, generateCarsButton);
 
   return controlRace;
 };

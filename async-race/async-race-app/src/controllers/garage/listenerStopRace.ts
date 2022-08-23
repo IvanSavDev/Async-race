@@ -1,6 +1,6 @@
 import { IState, RenderType } from 'Src/types/dataInterfaces';
 import { stopCar } from 'Src/api';
-import { stopAnimation } from 'Src/utils/animations';
+import { stopAnimateCar } from 'Src/utils/animations';
 import { RaceStatus } from 'Src/enum/enum';
 
 const listenerStopRace = (state: IState, resetBtn: HTMLElement, render: RenderType) => {
@@ -12,7 +12,7 @@ const listenerStopRace = (state: IState, resetBtn: HTMLElement, render: RenderTy
     const animations = Array.from(cars).map(async (car) => {
       const idCar = Number(car.getAttribute('id'));
       await stopCar(idCar);
-      stopAnimation(state, car, idCar);
+      stopAnimateCar(state, car, idCar);
     });
     await Promise.allSettled(animations);
     state.uiState.raceStatus = RaceStatus.start;

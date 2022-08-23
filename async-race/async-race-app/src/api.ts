@@ -6,7 +6,7 @@ import {
   ICarWinner,
   IState,
 } from './types/dataInterfaces';
-import { animateCar } from './utils/animations';
+import { startAnimateCar } from './utils/animations';
 import { getSecFromMsec } from './utils/time';
 import { getTimeDriveCar, MAX_CARS_ON_WINNERS_PAGE, MAX_CARS_ON_GARAGE_PAGE } from './utils/utils';
 
@@ -32,7 +32,7 @@ export const getCar = async (id: number): Promise<ICar | Record<string, unknown>
   return carData;
 };
 
-export const createCar = async (insertDataCar: {
+export const createCar = async (insertCarData: {
   name: string;
   color: string;
 }): Promise<ICar> => {
@@ -41,7 +41,7 @@ export const createCar = async (insertDataCar: {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(insertDataCar),
+    body: JSON.stringify(insertCarData),
   });
   const carData = await response.json();
   return carData;
@@ -94,7 +94,7 @@ export const startCar = async (
 ) => {
   const timeInSeconds = await getTimeDriveCar(idCar);
   const timeInMilliSeconds = getSecFromMsec(timeInSeconds);
-  animateCar(state, car, timeInMilliSeconds);
+  startAnimateCar(state, car, timeInMilliSeconds);
   const result = await driveCar(idCar, state.controller.signal);
   return {
     result,

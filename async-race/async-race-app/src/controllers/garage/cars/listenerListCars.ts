@@ -3,7 +3,7 @@ import {
 } from 'Src/api';
 import { ICar, IState, RenderType } from 'Src/types/dataInterfaces';
 import { updateCars } from 'Src/utils/utils';
-import { stopAnimation } from 'Src/utils/animations';
+import { stopAnimateCar } from 'Src/utils/animations';
 
 const listenerListCars = (state: IState, element: HTMLElement, render: RenderType) => {
   element.addEventListener('click', async ({ target }) => {
@@ -50,7 +50,7 @@ const listenerListCars = (state: IState, element: HTMLElement, render: RenderTyp
       state.controller.abort();
       state.controller = new AbortController();
       await stopCar(idCar);
-      stopAnimation(state, containerCar, idCar);
+      stopAnimateCar(state, containerCar, idCar);
     }
   });
 };

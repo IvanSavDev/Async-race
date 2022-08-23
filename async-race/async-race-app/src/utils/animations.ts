@@ -2,7 +2,7 @@ import { ICar, IState } from 'Src/types/dataInterfaces';
 import renderButtonsControlCar from 'Src/view/garage/cars/renderButtonsControlCar';
 import renderCarControl from 'Src/view/garage/cars/renderCarControl';
 
-const draw = (img: HTMLElement, progress: number) => {
+const drawCar = (img: HTMLElement, progress: number) => {
   const widthButtonsControlCar = 55;
   const widthCar = 100;
   const widthGap = 40;
@@ -13,7 +13,7 @@ const draw = (img: HTMLElement, progress: number) => {
   return width * progress;
 };
 
-const animate = (drawAnimation: (img: HTMLElement, progress: number) => number) => (
+const carAnimation = (drawAnimation: (img: HTMLElement, progress: number) => number) => (
   element: HTMLElement,
   duration: number,
   animationCar: { id: null | number; drive: boolean; position: number },
@@ -34,9 +34,9 @@ const animate = (drawAnimation: (img: HTMLElement, progress: number) => number) 
   }
 };
 
-const animation = animate(draw);
+const animation = carAnimation(drawCar);
 
-export const animateCar = async (
+export const startAnimateCar = async (
   state: IState,
   car: HTMLElement,
   timeDrive: number,
@@ -54,7 +54,7 @@ export const animateCar = async (
   animation(currentCarImg, timeDrive, animationCar);
 };
 
-export const stopAnimation = async (
+export const stopAnimateCar = async (
   state: IState,
   car: HTMLElement,
   idCar: number,
